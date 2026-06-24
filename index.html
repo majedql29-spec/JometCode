@@ -160,9 +160,16 @@ header h1 .logo img { width: 100%; height: 100%; object-fit: cover; }
 .btn-sm { padding: 3px 10px; font-size: 11px; }
 /* ===== MAIN ===== */
 .main { display: flex; flex: 1; overflow: hidden; }
+/* ===== RESIZE HANDLES ===== */
+.resize-handle {
+    flex: 0 0 auto; width: 4px; cursor: col-resize;
+    background: transparent; position: relative; z-index: 10;
+    transition: background 0.15s;
+}
+.resize-handle:hover, .resize-handle.active { background: #4ec9b0; }
 /* ===== SIDEBAR ===== */
 .sidebar {
-    width: 270px; min-width: 270px; background: #252526;
+    width: 270px; flex: 0 0 auto; background: #252526;
     border-right: 1px solid #3c3c3c; display: flex; flex-direction: column;
     font-size: 14px;
 }
@@ -197,8 +204,8 @@ header h1 .logo img { width: 100%; height: 100%; object-fit: cover; }
 .sidebar-content::-webkit-scrollbar-thumb { background: #424242; border-radius: 3px; }
 .sidebar-content::-webkit-scrollbar-thumb:hover { background: #555; }
 /* ===== EDITOR & OUTPUT ===== */
-.editor-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; z-index: 1; box-shadow: 2px 0 6px rgba(0,0,0,0.15); }
-.output-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.editor-panel { flex: 1 1 0%; display: flex; flex-direction: column; min-width: 200px; position: relative; z-index: 1; box-shadow: 2px 0 6px rgba(0,0,0,0.15); }
+.output-panel { flex: 0 0 auto; width: 400px; min-width: 200px; display: flex; flex-direction: column; }
 .panel-header {
     background: #1e1e1e; padding: 7px 16px; font-size: 11px;
     color: #888; border-bottom: 1px solid #2d2d2d;
@@ -342,7 +349,9 @@ body.light-mode .file-item.target { background: #d8efe8; }
 body.light-mode .file-item.dir { color: #0563c1; }
 body.light-mode .file-item .file-actions button:hover { color: #333; background: #ccc; }
 body.light-mode .file-item .file-actions .del-btn:hover { color: #d32f2f; }
+body.light-mode .resize-handle:hover, body.light-mode .resize-handle.active { background: #238636; }
 body.light-mode .panel-header { background: #f5f5f5; color: #777; border-bottom-color: #e0e0e0; }
+body.light-mode .output-panel { border-left: none; }
 body.light-mode .output-panel { border-left-color: #e0e0e0; }
 body.light-mode .CodeMirror { background: #fafafa; color: #333; }
 body.light-mode .CodeMirror-gutters { background: #fafafa; border-right-color: #e8e8e8; }
@@ -671,11 +680,13 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
             <button id="newFolderBtn" title="New Folder">+ Folder</button>
         </div>
     </div>
-    <div class="editor-panel">
+    <div class="resize-handle" id="resizeSidebar"></div>
+    <div class="editor-panel" id="editorPanel">
         <div class="panel-header" id="editorTab">📄 main.py</div>
         <textarea id="editor"></textarea>
     </div>
-    <div class="output-panel">
+    <div class="resize-handle" id="resizeOutput"></div>
+    <div class="output-panel" id="outputPanel">
         <div class="panel-header" id="outputHeader">📟 Output</div>
         <div id="output"><span class="info">// Ready</span></div>
     </div>
@@ -1011,6 +1022,74 @@ dropSettings.addEventListener('click', () => {
     `);
     dropContent.classList.remove('show');
 });
+
+// ===== RESIZE =====
+const RESIZE_MIN = { sidebar: 180, editor: 200, output: 200 };
+const RESIZE_MAX = { sidebar: 500, output: 800 };
+let drag = null;
+
+function getResizeSizes() {
+    const s = localStorage.getItem('resizeSizes');
+    if (s) try { return JSON.parse(s); } catch(e) {}
+    return { sidebar: 270, output: 400 };
+}
+function saveResizeSizes(sizes) {
+    localStorage.setItem('resizeSizes', JSON.stringify(sizes));
+}
+
+function applyResizeSizes() {
+    const sizes = getResizeSizes();
+    const sb = document.getElementById('sidebar');
+    const op = document.getElementById('outputPanel');
+    sb.style.width = sizes.sidebar + 'px';
+    op.style.width = sizes.output + 'px';
+}
+
+function startDrag(e, target) {
+    e.preventDefault();
+    const sizes = getResizeSizes();
+    const startX = e.clientX;
+    const startW = target === 'sidebar' ? sizes.sidebar : sizes.output;
+    const min = RESIZE_MIN[target];
+    const max = RESIZE_MAX[target];
+    const el = document.getElementById(target === 'sidebar' ? 'sidebar' : 'outputPanel');
+    const handle = target === 'sidebar' ? document.getElementById('resizeSidebar') : document.getElementById('resizeOutput');
+    handle.classList.add('active');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    function onMove(ev) {
+        const delta = ev.clientX - startX;
+        let w = startW + (target === 'sidebar' ? delta : -delta);
+        w = Math.max(min, Math.min(max, w));
+        el.style.width = w + 'px';
+    }
+    function onUp() {
+        handle.classList.remove('active');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        const finalW = parseInt(el.style.width);
+        const sizes = getResizeSizes();
+        sizes[target] = finalW;
+        saveResizeSizes(sizes);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+}
+
+document.getElementById('resizeSidebar').addEventListener('mousedown', (e) => startDrag(e, 'sidebar'));
+document.getElementById('resizeOutput').addEventListener('mousedown', (e) => startDrag(e, 'output'));
+
+// hide handles on mobile
+function updateHandles() {
+    const show = window.innerWidth > 768;
+    document.querySelectorAll('.resize-handle').forEach(el => el.style.display = show ? '' : 'none');
+}
+window.addEventListener('resize', updateHandles);
+updateHandles();
+applyResizeSizes();
 
 let isRegister = false;
 let authCallback = null;
