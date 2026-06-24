@@ -197,21 +197,33 @@ header h1 .logo img { width: 100%; height: 100%; object-fit: cover; }
 .sidebar-content::-webkit-scrollbar-thumb { background: #424242; border-radius: 3px; }
 .sidebar-content::-webkit-scrollbar-thumb:hover { background: #555; }
 /* ===== EDITOR & OUTPUT ===== */
-.editor-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.editor-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; z-index: 1; box-shadow: 2px 0 6px rgba(0,0,0,0.15); }
 .output-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .panel-header {
-    background: #2d2d2d; padding: 8px 16px; font-size: 12px;
-    color: #aaa; border-bottom: 2px solid #3c3c3c;
+    background: #1e1e1e; padding: 7px 16px; font-size: 11px;
+    color: #888; border-bottom: 1px solid #2d2d2d;
     display: flex; align-items: center; gap: 8px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px; text-transform: uppercase; font-weight: 500;
 }
-.CodeMirror { flex: 1; height: auto !important; font-family: 'Consolas', 'Courier New', monospace; font-size: 16px; line-height: 1.7; background: #1e1e1e; color: #d4d4d4; }
-.CodeMirror-gutters { background: #252526; border-right: 1px solid #3c3c3c; }
-.CodeMirror-linenumber { color: #555; padding: 0 8px 0 4px; }
+.CodeMirror {
+    flex: 1; height: auto !important;
+    font-family: 'Cascadia Code', 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 15px; line-height: 1.6; background: #1e1e1e; color: #d4d4d4;
+}
+.CodeMirror-gutters {
+    background: #1e1e1e; border-right: 1px solid #2d2d2d; min-width: 44px;
+}
+.CodeMirror-linenumber {
+    color: #555; padding: 0 12px 0 0; min-width: 24px;
+    text-align: right; font-size: 12px;
+}
+.CodeMirror-activeline .CodeMirror-activeline-background { background: rgba(255,255,255,0.03); }
+.CodeMirror-activeline .CodeMirror-linenumber { color: #777; }
 .CodeMirror-cursor { border-left: 2px solid #4ec9b0; }
 .CodeMirror-selected { background: #264f78; }
 .CodeMirror-focused .CodeMirror-selected { background: #264f78; }
-.CodeMirror-matchingbracket { background: rgba(78,201,176,0.2); border-bottom: 1px solid #4ec9b0; }
+.CodeMirror-matchingbracket { background: rgba(78,201,176,0.15); border: 1px solid #4ec9b0; border-radius: 2px; padding: 0 1px; }
+.CodeMirror-foldmarker { color: #555; }
 .cm-keyword { color: #c586c0 !important; }
 .cm-builtin { color: #dcdcaa !important; }
 .cm-number { color: #b5cea8 !important; }
@@ -228,18 +240,31 @@ header h1 .logo img { width: 100%; height: 100%; object-fit: cover; }
 .cm-tag { color: #569cd6 !important; }
 .cm-attribute { color: #9cdcfe !important; }
 .cm-bracket { color: #d4d4d4 !important; }
-.cm-error { color: #f44747 !important; }
-.CodeMirror-hints { background: #252526; border: 1px solid #3c3c3c; font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; }
-.CodeMirror-hint { color: #d4d4d4; padding: 4px 10px; }
-.CodeMirror-hint-active { background: #4ec9b0; color: #1e1e1e; }
-#output {
-    flex: 1; background: #1a1a1a; color: #d4d4d4; padding: 16px;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 15px; line-height: 1.6; overflow: auto; white-space: pre-wrap;
+.cm-error { color: #f44747 !important; text-decoration: underline wavy #f44747; }
+.CodeMirror-hints {
+    background: #252526; border: 1px solid #3c3c3c; border-radius: 8px;
+    font-family: 'Consolas', 'Courier New', monospace; font-size: 13px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); padding: 4px;
 }
+.CodeMirror-hint { color: #d4d4d4; padding: 5px 12px; border-radius: 4px; margin: 1px 0; }
+.CodeMirror-hint-active { background: #4ec9b0; color: #1e1e1e; }
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler { background: #1e1e1e; }
+.CodeMirror-vscrollbar::-webkit-scrollbar { width: 8px; }
+.CodeMirror-vscrollbar::-webkit-scrollbar-track { background: #1e1e1e; }
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover { background: #444; }
+#output {
+    flex: 1; background: #1a1a1a; color: #d4d4d4; padding: 14px 16px;
+    font-family: 'Cascadia Code', 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 14px; line-height: 1.6; overflow: auto; white-space: pre-wrap;
+}
+#output::-webkit-scrollbar { width: 8px; }
+#output::-webkit-scrollbar-track { background: #1a1a1a; }
+#output::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+#output::-webkit-scrollbar-thumb:hover { background: #444; }
 #output .error { color: #f44747; }
 #output .success { color: #4ec9b0; }
-#output .info { color: #888; }
+#output .info { color: #555; }
 .status-bar {
     background: #007acc; padding: 4px 16px; font-size: 12px;
     color: #fff; display: flex; justify-content: space-between;
@@ -317,15 +342,22 @@ body.light-mode .file-item.target { background: #d8efe8; }
 body.light-mode .file-item.dir { color: #0563c1; }
 body.light-mode .file-item .file-actions button:hover { color: #333; background: #ccc; }
 body.light-mode .file-item .file-actions .del-btn:hover { color: #d32f2f; }
-body.light-mode .panel-header { background: #e8e8e8; color: #555; border-bottom-color: #ccc; }
+body.light-mode .panel-header { background: #f5f5f5; color: #777; border-bottom-color: #e0e0e0; }
+body.light-mode .output-panel { border-left-color: #e0e0e0; }
 body.light-mode .CodeMirror { background: #fafafa; color: #333; }
-body.light-mode .CodeMirror-gutters { background: #f0f0f0; border-right-color: #ddd; }
-body.light-mode .CodeMirror-linenumber { color: #999; }
+body.light-mode .CodeMirror-gutters { background: #fafafa; border-right-color: #e8e8e8; }
+body.light-mode .CodeMirror-linenumber { color: #bbb; font-size: 12px; }
+body.light-mode .CodeMirror-activeline .CodeMirror-activeline-background { background: rgba(0,0,0,0.02); }
+body.light-mode .CodeMirror-activeline .CodeMirror-linenumber { color: #888; }
 body.light-mode .CodeMirror-cursor { border-left-color: #333; }
 body.light-mode .CodeMirror-selected { background: #add6ff; }
 body.light-mode .CodeMirror-focused .CodeMirror-selected { background: #add6ff; }
 body.light-mode .CodeMirror-matchingbracket { background: rgba(0,0,0,0.1); border-bottom-color: #666; }
-body.light-mode #output { background: #fafafa; color: #333; }
+body.light-mode #output { background: #fff; color: #333; }
+body.light-mode #output::-webkit-scrollbar-track { background: #fff; }
+body.light-mode #output::-webkit-scrollbar-thumb { background: #ccc; }
+body.light-mode #output::-webkit-scrollbar-thumb:hover { background: #aaa; }
+body.light-mode #output .info { color: #bbb; }
 body.light-mode .status-bar { background: #0e639c; }
 body.light-mode .modal-box { background: #f6f8fa; border-color: #d0d7de; }
 body.light-mode .modal-box h3 { color: #1e1e1e; }
