@@ -461,9 +461,7 @@ body.light-mode .cm-variable { color: #333 !important; }
 .oauth-spinner-text { color: #d4d4d4; font-size: 13px; }
 body.light-mode .oauth-spinner-overlay { background: rgba(255,255,255,0.6); }
 body.light-mode .oauth-spinner-text { color: #333; }
-/* ===== FILE ICON BADGE ===== */
-.file-item .icon { font-size: 10px; font-weight: 600; color: #888; letter-spacing: 0; min-width: 22px; text-align: center; }
-.file-item.dir .icon { color: #4ec9b0; }
+
 /* ===== MOBILE RESPONSIVE ===== */
 #mobileToggle { display: none; background: none; border: none; color: #d4d4d4; font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
 #mobileToggle:hover { background: #3c3c3c; }
@@ -504,7 +502,7 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
 <div id="authOverlay">
     <div class="auth-box">
         <button class="auth-close" id="authClose">✕</button>
-        <div class="auth-icon">U</div>
+        <div class="auth-icon">🐍</div>
         <h2 id="authTitle">Welcome Back</h2>
         <div class="auth-sub" id="authSub">Log in to use the explorer</div>
         <div class="auth-error" id="authError"></div>
@@ -567,7 +565,7 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
 
 <header>
     <div class="header-left">
-        <h1><span class="logo">U</span>Unapi</h1>
+        <h1><span class="logo">🐍</span>Unapi</h1>
         <div class="controls">
             <button class="btn btn-run" id="runBtn">Run</button>
             <button class="btn btn-clear" id="clearBtn">Clear</button>
@@ -607,17 +605,17 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
             <span class="sidebar-path" id="sidebarPath" title="Root folder">Explorer</span>
             <div class="side-actions">
                 <button id="newFileBtn" title="New File">+</button>
-                <button id="newFolderBtn" title="New Folder">F+</button>
+                <button id="newFolderBtn" title="New Folder">+📁</button>
             </div>
         </div>
         <div class="sidebar-content" id="fileTree"></div>
     </div>
     <div class="editor-panel">
-        <div class="panel-header" id="editorTab">main.py</div>
+        <div class="panel-header" id="editorTab">📄 main.py</div>
         <textarea id="editor"></textarea>
     </div>
     <div class="output-panel">
-        <div class="panel-header" id="outputHeader">Output</div>
+        <div class="panel-header" id="outputHeader">📟 Output</div>
         <div id="output"><span class="info">// Ready</span></div>
     </div>
 </div>
@@ -1075,7 +1073,7 @@ document.getElementById('infoOverlay').addEventListener('click', (e) => {
 function initApp() {
     document.getElementById('newFileBtn').style.display = '';
     document.getElementById('newFolderBtn').style.display = '';
-    statusText.textContent = currentUser;
+    statusText.textContent = '✅ ' + currentUser;
     loadFileTree();
 }
 
@@ -1108,7 +1106,7 @@ function updateSidebarPath() {
     const el = document.getElementById('sidebarPath');
     if (currentDir) {
         const folderName = currentDir.split('/').pop();
-        el.innerHTML = 'Dir: <span style="color:#4ec9b0">' + folderName + '</span>';
+        el.innerHTML = '📁 <span style="color:#4ec9b0">' + folderName + '</span>';
         el.title = 'Current: ' + currentDir + '\nClick to go back to root';
     } else {
         el.textContent = 'Explorer';
@@ -1117,17 +1115,15 @@ function updateSidebarPath() {
 }
 
 function fileIcon(name) {
-    if (name.endsWith('.py')) return 'Py';
-    if (name.endsWith('.js')) return 'JS';
-    if (name.endsWith('.html')) return 'HT';
-    if (name.endsWith('.css')) return 'CS';
-    if (name.endsWith('.json')) return 'JN';
-    if (name.endsWith('.md')) return 'MD';
-    if (name.endsWith('.txt')) return 'TX';
-    if (name.endsWith('.yml') || name.endsWith('.yaml')) return 'YM';
-    if (name.endsWith('.env')) return 'EN';
-    if (name.endsWith('.gitignore')) return 'GI';
-    return '';
+    if (name.endsWith('.py')) return '🐍';
+    if (name.endsWith('.html')) return '🌐';
+    if (name.endsWith('.json')) return '📋';
+    if (name.endsWith('.md')) return '📝';
+    if (name.endsWith('.txt')) return '📄';
+    if (name.endsWith('.yml') || name.endsWith('.yaml')) return '⚙️';
+    if (name.endsWith('.env')) return '🔒';
+    if (name.endsWith('.gitignore')) return '🚫';
+    return '📄';
 }
 
 function renderTree(entries, container, basePath) {
@@ -1148,7 +1144,7 @@ function renderTree(entries, container, basePath) {
 
         const icon = document.createElement('span');
         icon.className = 'icon';
-        icon.textContent = entry.type === 'dir' ? '[]' : fileIcon(entry.name);
+        icon.textContent = entry.type === 'dir' ? '📁' : fileIcon(entry.name);
         div.appendChild(icon);
 
         const name = document.createElement('span');
@@ -1195,7 +1191,7 @@ function renderTree(entries, container, basePath) {
                 e.stopPropagation();
                 const isHidden = childContainer.style.display === 'none';
                 childContainer.style.display = isHidden ? '' : 'none';
-                icon.textContent = isHidden ? '[+]' : '[-]';
+                icon.textContent = isHidden ? '📂' : '📁';
             });
         }
     }
@@ -1270,7 +1266,7 @@ function openFile(path) {
     if (!token) return;
     currentFilePath = path;
     cm.setValue(getFC(path));
-    editorTab.textContent = path.split('/').pop();
+    editorTab.textContent = '📄 ' + path.split('/').pop();
     highlightActive();
     openFileLabel.textContent = path;
     openFileLabel.style.display = 'inline';
@@ -1312,7 +1308,7 @@ function deleteItem(path) {
     saveFileIndex(files);
     removeFC(path);
     loadFileTree();
-    if (path === currentFilePath) { currentFilePath = ''; editorTab.textContent = 'main.py'; cm.setValue(''); openFileLabel.style.display = 'none'; }
+    if (path === currentFilePath) { currentFilePath = ''; editorTab.textContent = '📄 main.py'; cm.setValue(''); openFileLabel.style.display = 'none'; }
 }
 
 // ===== RUN =====
@@ -1331,7 +1327,7 @@ runBtn.addEventListener('click', async () => {
         if (data.error) output.innerHTML += '<span class="error">' + data.error.replace(/\n/g, '<br>') + '</span>';
         if (!data.output && !data.error) output.innerHTML = '<span class="success">Done</span>';
     } catch (e) { output.innerHTML = '<span class="error">Connection error</span>'; }
-    finally { runBtn.disabled = false; runBtn.textContent = 'Run'; }
+    finally { runBtn.disabled = false; runBtn.textContent = '▶ Run'; }
 });
 
 clearBtn.addEventListener('click', () => { output.innerHTML = ''; });
