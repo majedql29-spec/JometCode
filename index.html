@@ -145,7 +145,6 @@ header h1 .logo {
 }
 header h1 .logo img { width: 100%; height: 100%; object-fit: cover; }
 .header-left, .header-right { display: flex; align-items: center; gap: 12px; }
-.controls { display: flex; gap: 8px; align-items: center; }
 .btn {
     padding: 8px 20px; border: none; border-radius: 8px;
     font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap;
@@ -212,6 +211,8 @@ header h1 .logo img { width: 100%; height: 100%; object-fit: cover; }
     display: flex; align-items: center; gap: 8px;
     letter-spacing: 0.4px; text-transform: uppercase; font-weight: 500;
 }
+.panel-header .output-actions { margin-left: auto; display: flex; gap: 4px; }
+.panel-header .output-actions .btn { font-size: 11px; padding: 3px 12px; text-transform: none; }
 .CodeMirror {
     flex: 1; height: auto !important;
     font-family: 'Cascadia Code', 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
@@ -351,6 +352,9 @@ body.light-mode .file-item .file-actions button:hover { color: #333; background:
 body.light-mode .file-item .file-actions .del-btn:hover { color: #d32f2f; }
 body.light-mode .resize-handle:hover, body.light-mode .resize-handle.active { background: #238636; }
 body.light-mode .panel-header { background: #f5f5f5; color: #777; border-bottom-color: #e0e0e0; }
+body.light-mode .panel-header .btn-run { background: linear-gradient(135deg,#238636,#2ea043); color: #fff; }
+body.light-mode .panel-header .btn-clear { background: #bbb; color: #333; }
+body.light-mode .panel-header .btn-clear:hover { background: #aaa; }
 body.light-mode .output-panel { border-left: none; }
 body.light-mode .output-panel { border-left-color: #e0e0e0; }
 body.light-mode .CodeMirror { background: #fafafa; color: #333; }
@@ -539,6 +543,7 @@ body.light-mode .oauth-spinner-text { color: #333; }
     .controls { gap: 4px; }
     .btn { padding: 6px 12px; font-size: 12px; }
     .btn-sm { padding: 2px 8px; font-size: 10px; }
+    .panel-header .output-actions .btn { font-size: 10px; padding: 2px 8px; }
     .CodeMirror { font-size: 14px; }
     #output { font-size: 13px; padding: 10px; }
     .auth-box { width: 90%; max-width: 400px; padding: 28px 20px 20px; }
@@ -636,11 +641,6 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
 <header>
     <div class="header-left">
         <h1><span class="logo"><img src="logo.png" alt="U"></span>Unapi</h1>
-        <div class="controls">
-            <button class="btn btn-run" id="runBtn">Run</button>
-            <button class="btn btn-clear" id="clearBtn">Clear</button>
-            <button class="btn btn-save" id="saveBtn">Save</button>
-        </div>
     </div>
     <div class="header-right">
         <button id="mobileToggle" title="Toggle sidebar">&#9776;</button>
@@ -652,6 +652,7 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
                 <div class="drop-divider" id="loginDivider"></div>
                 <div class="drop-user" id="dropUser" style="display:none"></div>
                 <div class="drop-divider" id="userDivider" style="display:none"></div>
+                <button class="drop-item" id="dropSave">Save File</button>
                 <button class="drop-item" id="dropDownload">Download</button>
                 <button class="drop-item" id="dropSession">Save Session</button>
                 <div class="drop-divider"></div>
@@ -659,7 +660,6 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
                 <button class="drop-item" id="dropAbout">About</button>
                 <div class="drop-divider"></div>
                 <button class="drop-item" id="dropTheme">Theme</button>
-
                 <button class="drop-item" id="dropSettings">Settings</button>
                 <div class="drop-divider" id="logoutDivider" style="display:none"></div>
                 <button class="drop-item" id="dropLogout" style="display:none">Log Out</button>
@@ -687,7 +687,13 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
     </div>
     <div class="resize-handle" id="resizeOutput"></div>
     <div class="output-panel" id="outputPanel">
-        <div class="panel-header" id="outputHeader">📟 Output</div>
+        <div class="panel-header" id="outputHeader">
+            <span>📟 Output</span>
+            <div class="output-actions">
+                <button class="btn btn-run btn-sm" id="runBtn">Run</button>
+                <button class="btn btn-clear btn-sm" id="clearBtn">Clear</button>
+            </div>
+        </div>
         <div id="output"><span class="info">// Ready</span></div>
     </div>
 </div>
@@ -869,7 +875,6 @@ CodeMirror.registerHelper("hint", "python", function(cm) {
 const output = document.getElementById('output');
 const runBtn = document.getElementById('runBtn');
 const clearBtn = document.getElementById('clearBtn');
-const saveBtn = document.getElementById('saveBtn');
 const authOverlay = document.getElementById('authOverlay');
 const authTitle = document.getElementById('authTitle');
 const authUser = document.getElementById('authUser');
@@ -896,6 +901,7 @@ const dropUser = document.getElementById('dropUser');
 const dropLogin = document.getElementById('dropLogin');
 const dropLogout = document.getElementById('dropLogout');
 const dropDownload = document.getElementById('dropDownload');
+const dropSave = document.getElementById('dropSave');
 const dropSession = document.getElementById('dropSession');
 const dropShortcuts = document.getElementById('dropShortcuts');
 const dropAbout = document.getElementById('dropAbout');
@@ -962,6 +968,12 @@ dropDownload.addEventListener('click', () => {
     a.download = (currentFilePath || 'code').split('/').pop();
     a.click();
     URL.revokeObjectURL(a.href);
+    dropContent.classList.remove('show');
+});
+dropSave.addEventListener('click', () => {
+    if (token) saveCurrentFile();
+    else localStorage.setItem('guestCode', cm.getValue());
+    output.innerHTML = '<span class="success">File saved</span>';
     dropContent.classList.remove('show');
 });
 dropSession.addEventListener('click', () => {
@@ -1670,11 +1682,6 @@ runBtn.addEventListener('click', async () => {
 });
 
 clearBtn.addEventListener('click', () => { output.innerHTML = ''; });
-
-saveBtn.addEventListener('click', () => {
-    if (token) saveCurrentFile();
-    else { localStorage.setItem('guestCode', cm.getValue()); output.innerHTML = '<span class="success">Saved locally</span>'; }
-});
 
 function setStatusRight(text) { statusRight.textContent = text || ''; }
 </script>
