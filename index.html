@@ -1178,7 +1178,42 @@ function fcKey(path) { return 'file_' + currentUser + '_' + path; }
 function getFC(path) {
     const val = localStorage.getItem(fcKey(path));
     if (val !== null) return val;
-    if (path === 'main') return 'Welcome to Unapi!\n=================\nA Python code editor in your browser.\n\nStart by selecting a file from the explorer\nor create a new one in the sidebar.\n\nShortcuts:\n- Ctrl+Enter: Run code\n- Ctrl+I: Show autocomplete suggestions\n- Tab: Indent (4 spaces)\n';
+    if (path === 'main') return `Welcome to Unapi
+===================
+Unapi is an online Python code editor that runs right in your browser.
+
+FEATURES
+--------
+- Code editor with syntax highlighting (CodeMirror)
+- Python code execution (server-side)
+- Autocomplete suggestions (Ctrl+I)
+- File explorer with create/rename/delete
+- Project workspaces saved in your browser
+- Dark and Light themes
+- Google & GitHub login (optional)
+- Save/Restore sessions
+- Download your code
+
+SHORTCUTS
+---------
+  Ctrl+Enter  :  Run code
+  Ctrl+I      :  Show autocomplete suggestions
+  Ctrl+S      :  Save current file
+  Tab         :  Add indent (4 spaces)
+  Escape      :  Close any dialog
+
+HOW TO USE
+----------
+1. Open main.py in the sidebar
+2. Click Run to execute the code
+3. See the output in the panel on the right
+4. Create new files with the + button in the sidebar
+5. Right-click (or hover) on files to rename or delete
+6. Click the user menu (top-right) for more options
+
+TIP: Click the folder icon in the sidebar header
+to go back to the root directory.
+`;
     if (path === 'main.py') return DEFAULT_CODE;
     return '';
 }
