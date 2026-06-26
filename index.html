@@ -937,7 +937,7 @@ body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
     </div>
     <div class="resize-handle" id="resizeSidebar"></div>
     <div class="editor-panel" id="editorPanel">
-        <div class="panel-header" id="editorTab">📄 main.py</div>
+        <div class="panel-header" id="editorTab">📄 Editor</div>
         <textarea id="editor"></textarea>
     </div>
     <div class="resize-handle" id="resizeOutput"></div>
@@ -1445,7 +1445,7 @@ if (currentUser) {
   updateDropdown();
   document.getElementById('sidebarFooter').style.display = 'flex';
   loadFileTree();
-  setTimeout(() => openFile('main.py'), 100);
+  setTimeout(() => openFile('main project/example.py'), 100);
 } else {
   showGuestSidebar();
   updateDropdown();
@@ -1461,7 +1461,7 @@ if (auth) {
         updateDropdown();
         document.getElementById('sidebarFooter').style.display = 'flex';
         loadFileTree();
-        setTimeout(() => openFile('main.py'), 100);
+        setTimeout(() => openFile('main project/example.py'), 100);
       }
     } else {
       currentUser = null;
@@ -1659,8 +1659,9 @@ function getFileIndex() {
     const raw = localStorage.getItem(key);
     if (raw) return JSON.parse(raw);
     const def = [
-        { name: 'main', path: 'main', type: 'file' },
-        { name: 'main.py', path: 'main.py', type: 'file' }
+        { name: 'main project', path: 'main project', type: 'dir', children: [
+            { name: 'example.py', path: 'main project/example.py', type: 'file' }
+        ]}
     ];
     localStorage.setItem(key, JSON.stringify(def));
     return def;
@@ -1670,64 +1671,7 @@ function fcKey(path) { return 'file_' + currentUser + '_' + path; }
 function getFC(path) {
     const val = localStorage.getItem(fcKey(path));
     if (val !== null) return val;
-    if (path === 'main') return `╔══════════════════════════════════════╗
-║     🚀 WELCOME TO USCROVIS           ║
-║     Your browser Python IDE          ║
-╚══════════════════════════════════════╝
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  READY WHEN YOU ARE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  Open main.py in the sidebar 👈
-  Press Ctrl+Enter or click Run ▶️
-  Watch your code come to life
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  THE WORKSPACE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  📁 Sidebar   → Files & folders
-  ✏️  Editor    → Write Python code  
-  📟 Output    → See results instantly
-
-  Drag the dividers to resize any panel.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  FILE MAGIC
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ✓ Create files & folders from sidebar
-  ✓ Rename & delete with one hover click
-  ✓ Download everything as a ZIP
-  ✓ Guest mode — code without signing in
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ⚡ QUICK SHORTCUTS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  Ctrl+Enter  → Run code
-  Ctrl+S      → Save file
-  Ctrl+I      → Autocomplete
-  Tab         → Indent
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  🛡️  SAFE & SECURE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  • 10s execution timeout
-  • Blocked: os, subprocess, exec, eval
-  • Your files stay in local storage
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  💡 Pro tip: sign up for free to save
-     your projects between sessions!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Uscrovis — code from anywhere 🌍
-`;
-    if (path === 'main.py') return DEFAULT_CODE;
+    if (path === 'main project/example.py') return DEFAULT_CODE;
     return '';
 }
 function setFC(path, c) { localStorage.setItem(fcKey(path), c); }
