@@ -247,6 +247,7 @@ body {
 .auth-box .auth-field {
     position: relative; margin-bottom: 14px;
 }
+.auth-row { display: flex; gap: 12px; }
 .auth-box .auth-field label {
     display: block; font-size: 12px; color: #8b949e;
     margin-bottom: 4px; font-weight: 500;
@@ -771,13 +772,15 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
         <div class="auth-sub" id="authSub">Log in to use the explorer</div>
         <div class="auth-error" id="authError"></div>
         <form id="authForm" onsubmit="return false">
-            <div class="auth-field reg-only" id="fieldFirst" style="display:none">
-                <label>First Name</label>
-                <input type="text" id="authFirst" placeholder="Enter first name" autocomplete="off">
-            </div>
-            <div class="auth-field reg-only" id="fieldLast" style="display:none">
-                <label>Last Name</label>
-                <input type="text" id="authLast" placeholder="Enter last name" autocomplete="off">
+            <div class="auth-row reg-only" id="nameRow" style="display:none">
+                <div class="auth-field" style="flex:1;margin-bottom:0">
+                    <label>First Name</label>
+                    <input type="text" id="authFirst" placeholder="First name" autocomplete="off">
+                </div>
+                <div class="auth-field" style="flex:1;margin-bottom:0">
+                    <label>Last Name</label>
+                    <input type="text" id="authLast" placeholder="Last name" autocomplete="off">
+                </div>
             </div>
             <div class="auth-field">
                 <label>Username</label>
@@ -1375,7 +1378,7 @@ authToggleLink.addEventListener('click', () => {
     const parent = authToggleLink.parentElement;
     const textBefore = parent.childNodes[0];
     if (textBefore) textBefore.textContent = isRegister ? 'Already have an account? ' : "Don't have an account? ";
-    document.querySelectorAll('.reg-only').forEach(el => el.style.display = isRegister ? '' : 'none');
+    document.getElementById('nameRow').style.display = isRegister ? 'flex' : 'none';
     authError.style.display = 'none';
     authPass.value = '';
     pwStrength.classList.remove('show');
@@ -1488,75 +1491,62 @@ function fcKey(path) { return 'file_' + currentUser + '_' + path; }
 function getFC(path) {
     const val = localStorage.getItem(fcKey(path));
     if (val !== null) return val;
-    if (path === 'main') return `# Welcome to Uscrovis
+    if (path === 'main') return `╔══════════════════════════════════════╗
+║     🚀 WELCOME TO USCROVIS           ║
+║     Your browser Python IDE          ║
+╚══════════════════════════════════════╝
 
-Thank you for choosing Uscrovis — a browser-based Python development environment designed for simplicity and speed. Whether you are prototyping an algorithm, working through a tutorial, or building a small project, everything you need is right here.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  READY WHEN YOU ARE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Getting Started
+  Open main.py in the sidebar 👈
+  Press Ctrl+Enter or click Run ▶️
+  Watch your code come to life
 
-Open \`main.py\` in the sidebar to begin writing Python code immediately. Press **Ctrl+Enter** or click the **Run** button to execute your code and see the output on the right.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  THE WORKSPACE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Environment Overview
+  📁 Sidebar   → Files & folders
+  ✏️  Editor    → Write Python code  
+  📟 Output    → See results instantly
 
-The interface is divided into three areas:
+  Drag the dividers to resize any panel.
 
-- **Sidebar** (left) — browse and manage your files and folders
-- **Editor** (center) — write and edit your code with syntax highlighting
-- **Output** (right) — view program output, errors, and execution results
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FILE MAGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-All three panels can be resized by dragging the divider between them.
+  ✓ Create files & folders from sidebar
+  ✓ Rename & delete with one hover click
+  ✓ Download everything as a ZIP
+  ✓ Guest mode — code without signing in
 
-## Managing Files
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ⚡ QUICK SHORTCUTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-You must be signed in to use the file explorer. Registration is free and requires only a username and password. Once signed in, you can:
+  Ctrl+Enter  → Run code
+  Ctrl+S      → Save file
+  Ctrl+I      → Autocomplete
+  Tab         → Indent
 
-- Create new files and folders using the buttons at the bottom of the sidebar
-- Rename or delete items by hovering over them and clicking the edit or delete icons
-- Navigate into folders by clicking them; click the Explorer label at the top to return to root
-- Your entire project can be downloaded as a single ZIP file from the settings menu
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🛡️  SAFE & SECURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Guest users can still write and run code without signing in, but changes are not saved between sessions.
+  • 10s execution timeout
+  • Blocked: os, subprocess, exec, eval
+  • Your files stay in local storage
 
-## Authentication Options
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Uscrovis supports three ways to sign in:
+  💡 Pro tip: sign up for free to save
+     your projects between sessions!
 
-- **Username and password** — create an account directly on the platform
-- **Google** — sign in with your Google account
-- **GitHub** — sign in with your GitHub account
-
-All accounts are free.
-
-## Code Execution Rules
-
-- Code runs on the server using Python's isolated mode (\`-I\` flag)
-- Execution timeout is 10 seconds — loops that exceed this limit will be terminated
-- Dangerous modules (os, subprocess, socket, ctypes, and others) are blocked for security
-- Patterns such as \`exec()\`, \`eval()\`, and \`__import__\` are not permitted
-
-## Keyboard Shortcuts
-
-| Shortcut         | Action                      |
-|------------------|-----------------------------|
-| Ctrl + Enter     | Run code                    |
-| Ctrl + I         | Show autocomplete           |
-| Ctrl + S         | Save current file           |
-| Tab              | Indent (4 spaces)           |
-| Shift + Tab      | Un-indent                   |
-| Escape           | Close dialog or overlay     |
-| Ctrl + Z         | Undo                        |
-| Ctrl + Y / Shift | Redo                        |
-
-## Additional Notes
-
-- All files are stored in your browser's localStorage and never leave your machine
-- The server runs on Render's free tier and may sleep after 15 minutes of inactivity; the first request after sleep may take 30–60 seconds to respond
-- For the best experience, use the latest version of Chrome, Firefox, or Edge
-- This project is open source. You can find the repository on GitHub
-
----
-
-*Uscrovis — develop anywhere, from any browser.*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Uscrovis — code from anywhere 🌍
 `;
     if (path === 'main.py') return DEFAULT_CODE;
     return '';
