@@ -1021,19 +1021,29 @@ print(f"Euler's number (approx): {e}")
 print(f"Golden ratio: {(1 + math.sqrt(5)) / 2}")
 print(f"Natural log of 1000: {math.log(1000):.4f}")
 `;
-const firebaseConfig = {
-  apiKey: "AIzaSyDLQ47ucqfCVAqx5EIKb9C0tH-daVRmgkk",
-  authDomain: "uscrovis.firebaseapp.com",
-  projectId: "uscrovis",
-  storageBucket: "uscrovis.firebasestorage.app",
-  messagingSenderId: "1062196446955",
-  appId: "1:1062196446955:web:7cc30ca305192ff755e0ae",
-  measurementId: "G-22SHPCXXSV"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
+let auth = null;
 let currentUser = localStorage.getItem('currentUser');
+
+try {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDLQ47ucqfCVAqx5EIKb9C0tH-daVRmgkk",
+    authDomain: "uscrovis.firebaseapp.com",
+    projectId: "uscrovis",
+    storageBucket: "uscrovis.firebasestorage.app",
+    messagingSenderId: "1062196446955",
+    appId: "1:1062196446955:web:7cc30ca305192ff755e0ae",
+    measurementId: "G-22SHPCXXSV"
+  };
+  firebase.initializeApp(firebaseConfig);
+  auth = firebase.auth();
+} catch (e) {
+  console.warn('Firebase init failed:', e.message);
+  auth = null;
+}
+
+function onAuth(cb) {
+  if (auth) { cb(auth); }
+}
 
 // Immediate init from localStorage to avoid flicker
 if (currentUser) {
@@ -1047,23 +1057,25 @@ if (currentUser) {
 }
 
 // Firebase confirms or corrects the session
-auth.onAuthStateChanged(user => {
-  if (user) {
-    if (currentUser !== user.email) {
-      currentUser = user.email;
-      localStorage.setItem('currentUser', currentUser);
+if (auth) {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      if (currentUser !== user.email) {
+        currentUser = user.email;
+        localStorage.setItem('currentUser', currentUser);
+        updateDropdown();
+        document.getElementById('sidebarFooter').style.display = 'flex';
+        loadFileTree();
+        setTimeout(() => openFile('main.py'), 100);
+      }
+    } else {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      showGuestSidebar();
       updateDropdown();
-      document.getElementById('sidebarFooter').style.display = 'flex';
-      loadFileTree();
-      setTimeout(() => openFile('main.py'), 100);
     }
-  } else {
-    currentUser = null;
-    localStorage.removeItem('currentUser');
-    showGuestSidebar();
-    updateDropdown();
-  }
-});
+  });
+}
 let currentFilePath = 'main.py';
 let currentDir = '';
 let cm = null;
@@ -1235,7 +1247,7 @@ document.getElementById('setLogout').addEventListener('click', () => {
     if (cm) cm.setValue(localStorage.getItem('guestCode') || DEFAULT_CODE);
     currentFilePath = '';
     editorTab.textContent = '📄 Editor';
-    auth.signOut();
+    if (auth) auth.signOut();
 });
 document.getElementById('setDownload').addEventListener('click', async () => {
     const files = getFileIndex();
@@ -1472,6 +1484,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
     authBtn.textContent = 'Working...';
 
     try {
+        if (!auth) { showAuthError('Authentication service unavailable. Try again later.'); authBtn.disabled = false; authBtn.textContent = isRegister ? 'Sign up' : 'Continue'; return; }
         if (isRegister) {
             await auth.createUserWithEmailAndPassword(email, password);
         } else {
@@ -1490,6 +1503,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
             : err.code === 'auth/configuration-not-found' ? 'This sign-in method is not enabled. Contact the site owner.'
             : err.code === 'auth/popup-closed-by-user' ? 'Sign-in popup was closed before completing.'
             : err.code === 'auth/cancelled-popup-request' ? 'Sign-in cancelled.'
+            : err.code === 'auth/operation-not-allowed' ? 'This sign-in method is not enabled in Firebase Console.'
             : err.message;
         showAuthError(msg);
     } finally {
@@ -1499,14 +1513,24 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
 });
 
 function handleOAuth(provider) {
-    const prov = provider === 'google'
-        ? new firebase.auth.GoogleAuthProvider()
-        : new firebase.auth.GithubAuthProvider();
-    auth.signInWithPopup(prov).then(() => {
-        authOverlay.classList.remove('show');
-    }).catch(err => {
+    if (!auth || !firebase) { showAuthError('Authentication service unavailable.'); return; }
+    try {
+        const prov = provider === 'google'
+            ? new firebase.auth.GoogleAuthProvider()
+            : new firebase.auth.GithubAuthProvider();
+        auth.signInWithPopup(prov).then(() => {
+            authOverlay.classList.remove('show');
+        }).catch(err => {
+            const msg = err.code === 'auth/operation-not-allowed' ? 'This sign-in method is not enabled in Firebase Console. Enable it there first.'
+                : err.code === 'auth/configuration-not-found' ? 'OAuth configuration missing in Firebase Console.'
+                : err.code === 'auth/popup-closed-by-user' ? 'Sign-in popup was closed.'
+                : err.code === 'auth/cancelled-popup-request' ? 'Sign-in cancelled.'
+                : err.message;
+            showAuthError(msg);
+        });
+    } catch (err) {
         showAuthError(err.message);
-    });
+    }
 }
 
 function showAuthError(msg) {
