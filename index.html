@@ -1040,6 +1040,22 @@ print(f"Natural log of 1000: {math.log(1000):.4f}")
 `;
 let currentUser = localStorage.getItem('currentUser');
 let token = localStorage.getItem('token');
+// check for OAuth token from URL (popup blocked fallback)
+(function(){
+    const qt = new URLSearchParams(location.search).get('oauth_token');
+    if (qt) {
+        token = qt;
+        localStorage.setItem('token', qt);
+        const clean = location.origin + location.pathname;
+        history.replaceState(null, '', clean);
+    }
+    const lt = localStorage.getItem('oauth_token');
+    if (lt && !token) {
+        token = lt;
+        localStorage.setItem('token', lt);
+        localStorage.removeItem('oauth_token');
+    }
+})();
 let currentFilePath = 'main.py';
 let currentDir = '';
 let cm = null;

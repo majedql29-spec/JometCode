@@ -15,10 +15,33 @@ SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 TOKEN_CACHE = {}
 
-CALLBACK_HTML = '''<!DOCTYPE html><html><body><script>
+CALLBACK_HTML = '''<!DOCTYPE html>
+<html><head><title>Signing in...</title>
+<style>
+body{font-family:sans-serif;background:#1e1e1e;color:#d4d4d4;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+.loader{width:36px;height:36px;border:3px solid #30363d;border-top-color:#4ec9b0;border-radius:50%;animation:s .8s linear infinite;margin:0 auto 16px}
+@keyframes s{to{transform:rotate(360deg)}}
+</style></head><body><div style="text-align:center">
+<div class="loader"></div><div id="msg">Signing in...</div></div>
+<script>
 (function(){
-try{var h=new URLSearchParams(location.hash.slice(1));var t=h.get('access_token');if(t&&window.opener){window.opener.postMessage({type:"oauth",token:t},"*")}
-}catch(e){}window.close()})()
+try{
+var h=new URLSearchParams((location.hash||'').slice(1));
+var t=h.get('access_token')||new URLSearchParams(location.search.slice(1)).get('access_token');
+if(t){
+if(window.opener){window.opener.postMessage({type:"oauth",token:t},"*");window.close()}
+else{
+try{localStorage.setItem('oauth_token',t);window.location.href=window.location.origin+'?oauth_token='+t}
+catch(e){document.getElementById('msg').textContent='Login complete. Close this tab.'}
+}
+}else{
+var e=location.hash||location.search;
+document.getElementById('msg').textContent=e?'Token not found in URL':'No token in URL';
+}
+}catch(e){
+document.getElementById('msg').textContent='Error: '+e.message;
+}
+})()
 </script></body></html>'''
 
 def supabase(table):
