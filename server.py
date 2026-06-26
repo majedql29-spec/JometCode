@@ -15,35 +15,6 @@ SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 TOKEN_CACHE = {}
 
-CALLBACK_HTML = '''<!DOCTYPE html>
-<html><head><title>Signing in...</title>
-<style>
-body{font-family:sans-serif;background:#1e1e1e;color:#d4d4d4;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
-.loader{width:36px;height:36px;border:3px solid #30363d;border-top-color:#4ec9b0;border-radius:50%;animation:s .8s linear infinite;margin:0 auto 16px}
-@keyframes s{to{transform:rotate(360deg)}}
-</style></head><body><div style="text-align:center">
-<div class="loader"></div><div id="msg">Signing in...</div></div>
-<script src="/callback.js"></script></body></html>'''
-
-CALLBACK_JS = '''(function(){
-try{
-var h=new URLSearchParams((location.hash||'').slice(1));
-var t=h.get('access_token')||new URLSearchParams(location.search.slice(1)).get('access_token');
-if(t){
-if(window.opener){window.opener.postMessage({type:"oauth",token:t},"*");setTimeout(function(){window.close()},200)}
-else{
-try{localStorage.setItem('oauth_token',t);document.getElementById('msg').textContent='Login successful. Return to the original window.'}
-catch(e){document.getElementById('msg').textContent='Login complete. Close this tab.'}
-}
-}else{
-var e=location.hash||location.search;
-document.getElementById('msg').textContent=e?'Token not found in URL':'No token in URL';
-}
-}catch(e){
-document.getElementById('msg').textContent='Error: '+e.message;
-}
-})()'''
-
 def supabase(table):
     return SupabaseTable(table)
 
@@ -169,6 +140,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if path == '/api/register':
             username = data.get('username', '').strip()
             password = data.get('password', '')
+            first_name = data.get('first_name', '').strip()
+            last_name = data.get('last_name', '').strip()
             if not username or not password:
                 return self.send_error_json('الاسم وكلمة المرور مطلوبان')
             if len(password) < 8:
@@ -180,6 +153,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 supabase('users').insert({
                     'username': username,
                     'password': hash_pass(password),
+                    'first_name': first_name,
+                    'last_name': last_name,
                     'created_at': datetime.now().isoformat()
                 })
                 users = supabase('users').eq('username', username)
@@ -238,48 +213,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 self.send_json({'output': '', 'error': str(e)})
 
-        elif path == '/api/oauth-login':
-            supabase_token = data.get('token', '')
-            if not supabase_token:
-                return self.send_error_json('Missing token')
-            try:
-                headers = {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': f'Bearer {supabase_token}'
-                }
-                with httpx.Client() as client:
-                    resp = client.get(f'{SUPABASE_URL}/auth/v1/user', headers=headers)
-                    if resp.status_code != 200:
-                        return self.send_error_json('Invalid OAuth token')
-                    user_data = resp.json()
-                email = user_data.get('email', '')
-                if not email:
-                    return self.send_error_json('Email not found from provider')
-                username = email
-                existing = supabase('users').eq('username', username)
-                if existing and len(existing) > 0:
-                    user_row = existing[0]
-                else:
-                    supabase('users').insert({
-                        'username': username,
-                        'password': '',
-                        'created_at': datetime.now().isoformat()
-                    })
-                    users = supabase('users').eq('username', username)
-                    if not users or len(users) == 0:
-                        return self.send_error_json('Failed to create user')
-                    user_row = users[0]
-                token = gen_token()
-                TOKEN_CACHE[token] = user_row['username']
-                supabase('sessions').insert({
-                    'token': token,
-                    'user_id': user_row['id'],
-                    'created_at': datetime.now().isoformat()
-                })
-                return self.send_json({'token': token, 'user': user_row['username'], 'email': email})
-            except Exception as e:
-                return self.send_error_json(f'OAuth error: {str(e)}')
-
         else: self.send_error_json('غير معروف')
 
     def do_GET(self):
@@ -293,23 +226,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if path == '/api/me':
             if not username: return self.send_error_json('غير مصرح', 401)
             return self.send_json({'user': username})
-
-        if path == '/auth/callback':
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html; charset=utf-8')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'")
-            self.end_headers()
-            self.wfile.write(CALLBACK_HTML.encode())
-            return
-
-        if path == '/callback.js':
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/javascript; charset=utf-8')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(CALLBACK_JS.encode())
-            return
 
         if path == '/': self.path = '/index.html'
         return super().do_GET()
