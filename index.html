@@ -769,8 +769,6 @@ body.light-mode .oauth-spinner-text { color: #333; }
     .main { flex-direction: column; }
     .editor-panel, .output-panel { flex: 1; }
 }
-    .editor-panel, .output-panel { flex: 1; }
-}
 body.light-mode #mobileToggle { color: #333; }
 body.light-mode #mobileToggle:hover { background: #d0d0d0; }
 </style>
@@ -936,7 +934,7 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
 
         <div class="settings-section">
             <div class="settings-section-title">Preferences</div>
-            <button class="settings-item" id="setTheme"><span class="si-icon">🌙</span> Theme <span class="si-right" id="setThemeLabel">Dark</span></button>
+            <button class="settings-item" id="setTheme"><span class="si-icon" id="setThemeIcon">🌙</span> Theme <span class="si-right" id="setThemeLabel">Dark</span></button>
             <button class="settings-item" id="setShortcuts"><span class="si-icon">⌨️</span> Shortcuts</button>
             <button class="settings-item" id="setSettings"><span class="si-icon">⚙️</span> Settings</button>
         </div>
@@ -1146,6 +1144,7 @@ const authPass = document.getElementById('authPass');
 const authBtn = document.getElementById('authBtn');
 const authError = document.getElementById('authError');
 const authToggleLink = document.getElementById('authToggleLink');
+const authSub = document.getElementById('authSub');
 const fileTree = document.getElementById('fileTree');
 const newFileBtn = document.getElementById('newFileBtn');
 const newFolderBtn = document.getElementById('newFolderBtn');
@@ -1227,6 +1226,9 @@ document.getElementById('setLogout').addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
     openFileLabel.style.display = 'none';
+    if (cm) cm.setValue(localStorage.getItem('guestCode') || DEFAULT_CODE);
+    currentFilePath = '';
+    editorTab.textContent = '📄 Editor';
     showGuestSidebar();
     updateDropdown();
 });
@@ -1280,6 +1282,7 @@ document.getElementById('setTheme').addEventListener('click', () => {
     const light = document.body.classList.contains('light-mode');
     localStorage.setItem('theme', light ? 'light' : 'dark');
     document.getElementById('setThemeLabel').textContent = light ? 'Light' : 'Dark';
+    document.getElementById('setThemeIcon').textContent = light ? '☀️' : '🌙';
 });
 document.getElementById('setSettings').addEventListener('click', () => {
     closeSettings();
@@ -1391,7 +1394,7 @@ else showGuestSidebar();
 setTimeout(() => { if (cm) cm.refresh(); }, 500);
 setTimeout(() => { const el = document.getElementById('splashScreen'); if (el) el.remove(); }, 4000);
 
-if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('setThemeLabel').textContent = 'Light'; } else { document.getElementById('setThemeLabel').textContent = 'Dark'; }
+if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('setThemeLabel').textContent = 'Light'; document.getElementById('setThemeIcon').textContent = '☀️'; } else { document.getElementById('setThemeLabel').textContent = 'Dark'; document.getElementById('setThemeIcon').textContent = '🌙'; }
 
 // ===== OAUTH =====
 let oauthPopup = null;
@@ -1439,13 +1442,10 @@ function handleOAuth(provider) {
     let oauthDone = false;
     const onOauthResult = () => { oauthDone = true; };
     window.__oauthResolve = onOauthResult;
-    setTimeout(() => {
-        oauthPopup = window.open(url, 'oauth', 'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',menubar=no,toolbar=no,location=yes');
-        if (!oauthPopup || oauthPopup.closed) {
-            oauthSpinner.classList.remove('show');
-            showAuthError('Popup blocked. Please allow popups for this site.');
-        }
-    }, 80);
+    oauthPopup = window.open(url, 'oauth', 'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',menubar=no,toolbar=no,location=yes');
+    if (!oauthPopup || oauthPopup.closed) {
+        // popup blocked - will rely on localStorage fallback
+    }
     const checkClosed = setInterval(() => {
         if ((!oauthPopup || oauthPopup.closed) && !oauthDone) {
             clearInterval(checkClosed);
@@ -1453,6 +1453,17 @@ function handleOAuth(provider) {
         }
         if (oauthDone) clearInterval(checkClosed);
     }, 500);
+    // Poll localStorage for tab fallback (when popup blocked)
+    const tabFallback = setInterval(() => {
+        const lt = localStorage.getItem('oauth_token');
+        if (lt) {
+            clearInterval(tabFallback);
+            clearInterval(checkClosed);
+            localStorage.removeItem('oauth_token');
+            handleOAuthToken(lt);
+        }
+    }, 500);
+    setTimeout(() => clearInterval(tabFallback), 120000);
 }
 
 // ===== AUTH =====
@@ -1591,103 +1602,75 @@ function fcKey(path) { return 'file_' + currentUser + '_' + path; }
 function getFC(path) {
     const val = localStorage.getItem(fcKey(path));
     if (val !== null) return val;
-    if (path === 'main') return `Welcome to Uscrovis!
-====================
+    if (path === 'main') return `# Welcome to Uscrovis
 
-Uscrovis is a complete Python coding environment that runs
-entirely in your browser. No setup, no installations,
-no dependencies — just open and start coding.
+Thank you for choosing Uscrovis — a browser-based Python development environment designed for simplicity and speed. Whether you are prototyping an algorithm, working through a tutorial, or building a small project, everything you need is right here.
 
-┌─────────────────────────────────────────────────────┐
-│                    FEATURES                          │
-├─────────────────────────────────────────────────────┤
-│ • Code editor with syntax highlighting (CodeMirror) │
-│ • Run Python code on the server (real execution)    │
-│ • Smart autocomplete suggestions (Ctrl+I)           │
-│ • File explorer with create, rename, and delete     │
-│ • Projects saved in your browser (localStorage)     │
-│ • Dark and Light themes (click the moon icon)       │
-│ • Google & GitHub login (optional, no account req)  │
-│ • Save and restore full sessions                    │
-│ • Download your code as .py files                   │
-│ • Fully responsive — works on mobile too            │
-└─────────────────────────────────────────────────────┘
+## Getting Started
 
-┌─────────────────────────────────────────────────────┐
-│                    SHORTCUTS                         │
-├─────────────────────────────────────────────────────┤
-│  Ctrl + Enter     Run your code                     │
-│  Ctrl + I         Show autocomplete suggestions     │
-│  Ctrl + S         Save the current file             │
-│  Tab              Indent (4 spaces)                 │
-│  Shift + Tab      Un-indent                         │
-│  Escape           Close any dialog or overlay       │
-│  Ctrl + Z         Undo                              │
-│  Ctrl + Y         Redo                              │
-│  Ctrl + F         Search in code (browser search)   │
-└─────────────────────────────────────────────────────┘
+Open \`main.py\` in the sidebar to begin writing Python code immediately. Press **Ctrl+Enter** or click the **Run** button to execute your code and see the output on the right.
 
-┌─────────────────────────────────────────────────────┐
-│                    HOW TO USE                        │
-├─────────────────────────────────────────────────────┤
-│                                                      │
-│  1. Open "main.py" from the sidebar (left panel)    │
-│                                                      │
-│  2. Click the "Run" button (▶) or press             │
-│     Ctrl+Enter to execute the code                  │
-│                                                      │
-│  3. The output will appear in the panel on the       │
-│     right side — stdout, stderr, and return codes   │
-│                                                      │
-│  4. Create new files using the + buttons in the      │
-│     sidebar header (file or folder)                 │
-│                                                      │
-│  5. Right-click or hover over files to Rename       │
-│     or Delete them                                  │
-│                                                      │
-│  6. Click the hamburger menu (☰) on mobile to       │
-│     show/hide the sidebar                           │
-│                                                      │
-│  7. Switch between files by clicking them in the    │
-│     sidebar — each file is saved automatically      │
-│                                                      │
-│  8. Use the menu in the top-right corner to log     │
-│     in with Google, GitHub, or username/password,   │
-│     or to switch themes and download your code      │
-└─────────────────────────────────────────────────────┘
+## Environment Overview
 
-┌─────────────────────────────────────────────────────┐
-│                    TIPS & NOTES                      │
-├─────────────────────────────────────────────────────┤
-│ • All your files are saved in your browser's         │
-│   localStorage — they never leave your machine      │
-│                                                      │
-│ • You must be logged in to use the file explorer    │
-│   (guests can still write and run code)             │
-│                                                      │
-│ • Login is free — register with any username and     │
-│   password (minimum 8 characters)                   │
-│                                                      │
-│ • The code runs on the server with a 10-second      │
-│   timeout, so avoid infinite loops                  │
-│                                                      │
-│ • To save your entire workspace (all files), use    │
-│   the "Save Session" option in the menu             │
-│                                                      │
-│ • You can restore a saved session by clicking       │
-│   "Save Session" again — it will prompt to restore  │
-│                                                      │
-│ • If the server is asleep (Render free tier), the    │
-│   first request takes about 30-60 seconds to wake   │
-│                                                      │
-│ • Click the folder icon (📁) in the sidebar header  │
-│   to navigate back to the root directory            │
-│                                                      │
-│ • You can organize files into folders using the     │
-│   "New Folder" button in the sidebar                │
-└─────────────────────────────────────────────────────┘
+The interface is divided into three areas:
 
-Happy coding! 🐍
+- **Sidebar** (left) — browse and manage your files and folders
+- **Editor** (center) — write and edit your code with syntax highlighting
+- **Output** (right) — view program output, errors, and execution results
+
+All three panels can be resized by dragging the divider between them.
+
+## Managing Files
+
+You must be signed in to use the file explorer. Registration is free and requires only a username and password. Once signed in, you can:
+
+- Create new files and folders using the buttons at the bottom of the sidebar
+- Rename or delete items by hovering over them and clicking the edit or delete icons
+- Navigate into folders by clicking them; click the Explorer label at the top to return to root
+- Your entire project can be downloaded as a single ZIP file from the settings menu
+
+Guest users can still write and run code without signing in, but changes are not saved between sessions.
+
+## Authentication Options
+
+Uscrovis supports three ways to sign in:
+
+- **Username and password** — create an account directly on the platform
+- **Google** — sign in with your Google account
+- **GitHub** — sign in with your GitHub account
+
+OAuth users are identified by their email address. All accounts are free.
+
+## Code Execution Rules
+
+- Code runs on the server using Python's isolated mode (\`-I\` flag)
+- Execution timeout is 10 seconds — loops that exceed this limit will be terminated
+- Dangerous modules (os, subprocess, socket, ctypes, and others) are blocked for security
+- Patterns such as \`exec()\`, \`eval()\`, and \`__import__\` are not permitted
+
+## Keyboard Shortcuts
+
+| Shortcut         | Action                      |
+|------------------|-----------------------------|
+| Ctrl + Enter     | Run code                    |
+| Ctrl + I         | Show autocomplete           |
+| Ctrl + S         | Save current file           |
+| Tab              | Indent (4 spaces)           |
+| Shift + Tab      | Un-indent                   |
+| Escape           | Close dialog or overlay     |
+| Ctrl + Z         | Undo                        |
+| Ctrl + Y / Shift | Redo                        |
+
+## Additional Notes
+
+- All files are stored in your browser's localStorage and never leave your machine
+- The server runs on Render's free tier and may sleep after 15 minutes of inactivity; the first request after sleep may take 30–60 seconds to respond
+- For the best experience, use the latest version of Chrome, Firefox, or Edge
+- This project is open source. You can find the repository on GitHub
+
+---
+
+*Uscrovis — develop anywhere, from any browser.*
 `;
     if (path === 'main.py') return DEFAULT_CODE;
     return '';

@@ -30,9 +30,9 @@ try{
 var h=new URLSearchParams((location.hash||'').slice(1));
 var t=h.get('access_token')||new URLSearchParams(location.search.slice(1)).get('access_token');
 if(t){
-if(window.opener){window.opener.postMessage({type:"oauth",token:t},"*");window.close()}
+if(window.opener){window.opener.postMessage({type:"oauth",token:t},"*");setTimeout(function(){window.close()},200)}
 else{
-try{localStorage.setItem('oauth_token',t);window.location.href=window.location.origin+'?oauth_token='+t}
+try{localStorage.setItem('oauth_token',t);document.getElementById('msg').textContent='Login successful. Return to the original window.'}
 catch(e){document.getElementById('msg').textContent='Login complete. Close this tab.'}
 }
 }else{
