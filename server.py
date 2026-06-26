@@ -7,13 +7,44 @@ import tempfile
 import socketserver
 import hashlib
 import uuid
+import random
+import smtplib
 import httpx
-from datetime import datetime
+from datetime import datetime, timedelta
+from email.mime.text import MIMEText
 
 SUPABASE_URL = 'https://oikzwjqyctureqkcigrx.supabase.co'
 SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pa3p3anF5Y3R1cmVxa2NpZ3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMTYwMTUsImV4cCI6MjA5Nzc5MjAxNX0.-bL4yor0cSne_O7u84JQWKgkEK6ds3SbbrDAA4Rf_HE'
 
 TOKEN_CACHE = {}
+
+SMTP_HOST = os.environ.get('SMTP_HOST', 'smtp.gmail.com')
+SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
+SMTP_USER = os.environ.get('SMTP_USER', '')
+SMTP_PASS = os.environ.get('SMTP_PASS', '')
+SMTP_FROM = os.environ.get('SMTP_FROM', SMTP_USER or 'noreply@uscrovis.xyz')
+
+def gen_code():
+    return str(random.randint(100000, 999999))
+
+def send_verification_code(email, code):
+    if not SMTP_USER or not SMTP_PASS:
+        print(f'[SMTP] Not configured — would send code {code} to {email}')
+        return False
+    msg = MIMEText(f'Welcome to Uscrovis!\n\nYour verification code is: {code}\n\nThis code expires in 10 minutes.\n\nIf you did not request this, please ignore this email.')
+    msg['Subject'] = 'Uscrovis — Verify Your Email'
+    msg['From'] = SMTP_FROM
+    msg['To'] = email
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
+            s.starttls()
+            s.login(SMTP_USER, SMTP_PASS)
+            s.send_message(msg)
+        print(f'[SMTP] Code sent to {email}')
+        return True
+    except Exception as e:
+        print(f'[SMTP] Error: {e}')
+        return False
 
 def supabase(table):
     return SupabaseTable(table)
@@ -37,6 +68,19 @@ class SupabaseTable:
 
     def eq(self, column, value):
         return self._query('GET', params={column: f'eq.{value}'})
+
+    def patch(self, data, column, value):
+        headers = {
+            'apikey': SUPABASE_KEY,
+            'Authorization': f'Bearer {SUPABASE_KEY}',
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+        }
+        with httpx.Client() as client:
+            r = client.patch(f'{self.base}?{column}=eq.{value}', headers=headers, json=data)
+            if r.status_code >= 400:
+                raise Exception(f'Supabase error: {r.text}')
+            return r.json()
 
     def _query(self, method, json=None, params=None):
         with httpx.Client() as client:
@@ -138,60 +182,100 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         path = self.path
 
         if path == '/api/register':
-            username = data.get('username', '').strip()
+            email = data.get('email', '').strip().lower()
             password = data.get('password', '')
-            first_name = data.get('first_name', '').strip()
-            last_name = data.get('last_name', '').strip()
-            if not username or not password:
-                return self.send_error_json('الاسم وكلمة المرور مطلوبان')
+            if not email or not password:
+                return self.send_error_json('Email and password required')
+            if '@' not in email or '.' not in email:
+                return self.send_error_json('Invalid email address')
             if len(password) < 8:
-                return self.send_error_json('كلمة المرور يجب أن تكون 8 أحرف على الأقل')
+                return self.send_error_json('Password must be at least 8 characters')
             try:
-                existing = supabase('users').eq('username', username)
+                existing = supabase('users').eq('username', email)
                 if existing and len(existing) > 0:
-                    return self.send_error_json('المستخدم موجود بالفعل')
+                    return self.send_error_json('This email is already registered')
+                code = gen_code()
                 supabase('users').insert({
-                    'username': username,
+                    'username': email,
                     'password': hash_pass(password),
-                    'first_name': first_name,
-                    'last_name': last_name,
+                    'email_verified': False,
+                    'verification_code': code,
+                    'code_sent_at': datetime.now().isoformat(),
                     'created_at': datetime.now().isoformat()
                 })
-                users = supabase('users').eq('username', username)
-                if not users or len(users) == 0:
-                    return self.send_error_json('فشل إنشاء المستخدم')
-                user_id = users[0]['id']
-                token = gen_token()
-                TOKEN_CACHE[token] = username
-                supabase('sessions').insert({
-                    'token': token,
-                    'user_id': user_id,
-                    'created_at': datetime.now().isoformat()
-                })
-                return self.send_json({'token': token, 'user': username})
+                sent = send_verification_code(email, code)
+                if not sent:
+                    # SMTP not configured — auto-verify for development
+                    supabase('users').patch(
+                        {'email_verified': True, 'verification_code': ''},
+                        'username', email
+                    )
+                    users = supabase('users').eq('username', email)
+                    if users and len(users) > 0:
+                        uid = users[0]['id']
+                        token = gen_token()
+                        TOKEN_CACHE[token] = email
+                        supabase('sessions').insert({
+                            'token': token, 'user_id': uid,
+                            'created_at': datetime.now().isoformat()
+                        })
+                        return self.send_json({'token': token, 'user': email})
+                return self.send_json({'message': 'Verification code sent', 'email': email})
             except Exception as e:
-                return self.send_error_json(f'خطأ: {str(e)}')
+                return self.send_error_json(f'Error: {str(e)}')
+
+        elif path == '/api/verify-email':
+            email = data.get('email', '').strip().lower()
+            code = data.get('code', '').strip()
+            if not email or not code:
+                return self.send_error_json('Email and code required')
+            try:
+                users = supabase('users').eq('username', email)
+                if not users or len(users) == 0:
+                    return self.send_error_json('User not found')
+                user = users[0]
+                if user.get('email_verified'):
+                    return self.send_error_json('Email already verified')
+                stored_code = user.get('verification_code', '')
+                if stored_code != code:
+                    return self.send_error_json('Invalid verification code')
+                supabase('users').patch(
+                    {'email_verified': True, 'verification_code': ''},
+                    'username', email
+                )
+                token = gen_token()
+                TOKEN_CACHE[token] = email
+                supabase('sessions').insert({
+                    'token': token, 'user_id': user['id'],
+                    'created_at': datetime.now().isoformat()
+                })
+                return self.send_json({'token': token, 'user': email})
+            except Exception as e:
+                return self.send_error_json(f'Error: {str(e)}')
 
         elif path == '/api/login':
-            username = data.get('username', '').strip()
+            email = data.get('email', '').strip().lower()
             password = data.get('password', '')
+            if not email or not password:
+                return self.send_error_json('Email and password required')
             try:
-                users = supabase('users').eq('username', username)
+                users = supabase('users').eq('username', email)
                 if not users or len(users) == 0:
-                    return self.send_error_json('المستخدم غير موجود')
+                    return self.send_error_json('No account with this email')
                 user = users[0]
                 if not check_pass(password, user['password']):
-                    return self.send_error_json('كلمة المرور خطأ')
+                    return self.send_error_json('Incorrect password')
+                if not user.get('email_verified'):
+                    return self.send_error_json('Please verify your email first')
                 token = gen_token()
-                TOKEN_CACHE[token] = username
+                TOKEN_CACHE[token] = email
                 supabase('sessions').insert({
-                    'token': token,
-                    'user_id': user['id'],
+                    'token': token, 'user_id': user['id'],
                     'created_at': datetime.now().isoformat()
                 })
-                return self.send_json({'token': token, 'user': username})
+                return self.send_json({'token': token, 'user': email})
             except Exception as e:
-                return self.send_error_json(f'خطأ: {str(e)}')
+                return self.send_error_json(f'Error: {str(e)}')
 
         elif path == '/api/run':
             code = data.get('code', '')

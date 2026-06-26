@@ -772,27 +772,22 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
         <div class="auth-sub" id="authSub">Log in to use the explorer</div>
         <div class="auth-error" id="authError"></div>
         <form id="authForm" onsubmit="return false">
-            <div class="auth-row reg-only" id="nameRow" style="display:none">
-                <div class="auth-field" style="flex:1;margin-bottom:0">
-                    <label>First Name</label>
-                    <input type="text" id="authFirst" placeholder="First name" autocomplete="off">
-                </div>
-                <div class="auth-field" style="flex:1;margin-bottom:0">
-                    <label>Last Name</label>
-                    <input type="text" id="authLast" placeholder="Last name" autocomplete="off">
-                </div>
+            <div class="auth-field" id="fieldEmail">
+                <label>Email</label>
+                <input type="email" id="authEmail" placeholder="Enter your email" autocomplete="off">
             </div>
-            <div class="auth-field">
-                <label>Username</label>
-                <input type="text" id="authUser" placeholder="Enter username" autocomplete="off">
-            </div>
-            <div class="auth-field">
+            <div class="auth-field" id="fieldPass">
                 <label>Password</label>
                 <input type="password" id="authPass" placeholder="Enter password">
                 <div class="pw-strength" id="pwStrength">
                     <div class="pw-bar" id="pwBar"></div>
                     <span class="pw-label" id="pwLabel"></span>
                 </div>
+            </div>
+            <div class="auth-field" id="fieldCode" style="display:none">
+                <label>Verification Code</label>
+                <input type="text" id="authCode" placeholder="Enter 6-digit code" maxlength="6" autocomplete="off" inputmode="numeric">
+                <div style="font-size:12px;color:#8b949e;margin-top:4px">We sent a code to your email</div>
             </div>
             <button class="auth-btn" id="authBtn" type="submit">Log In</button>
         </form>
@@ -1096,7 +1091,8 @@ const runBtn = document.getElementById('runBtn');
 const clearBtn = document.getElementById('clearBtn');
 const authOverlay = document.getElementById('authOverlay');
 const authTitle = document.getElementById('authTitle');
-const authUser = document.getElementById('authUser');
+const authEmail = document.getElementById('authEmail');
+const authCode = document.getElementById('authCode');
 const authPass = document.getElementById('authPass');
 const authBtn = document.getElementById('authBtn');
 const authError = document.getElementById('authError');
@@ -1322,6 +1318,8 @@ updateHandles();
 applyResizeSizes();
 
 let isRegister = false;
+let waitingVerification = false;
+let pendingEmail = '';
 let authCallback = null;
 let modalCallback = null;
 
@@ -1371,14 +1369,18 @@ document.getElementById('authClose').addEventListener('click', () => { authOverl
 
 authToggleLink.addEventListener('click', () => {
     isRegister = !isRegister;
+    waitingVerification = false;
     authTitle.textContent = isRegister ? 'Create Account' : 'Welcome Back';
     authSub.textContent = isRegister ? 'Create an account to use the explorer' : 'Log in to use the explorer';
     authBtn.textContent = isRegister ? 'Create Account' : 'Log In';
     authToggleLink.textContent = isRegister ? 'Log In' : 'Create Account';
+    document.getElementById('authToggle').style.display = isRegister ? 'none' : '';
     const parent = authToggleLink.parentElement;
     const textBefore = parent.childNodes[0];
     if (textBefore) textBefore.textContent = isRegister ? 'Already have an account? ' : "Don't have an account? ";
-    document.getElementById('nameRow').style.display = isRegister ? 'flex' : 'none';
+    document.getElementById('fieldCode').style.display = 'none';
+    document.getElementById('fieldEmail').style.display = '';
+    document.getElementById('fieldPass').style.display = '';
     authError.style.display = 'none';
     authPass.value = '';
     pwStrength.classList.remove('show');
@@ -1418,16 +1420,52 @@ authPass.addEventListener('input', () => {
 document.getElementById('authForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (authBtn.disabled) return;
-    const username = authUser.value.trim();
+
+    if (waitingVerification) {
+        // Step 2: verify code
+        const code = authCode.value.trim();
+        if (!code) { showAuthError('Enter the verification code'); return; }
+        authBtn.disabled = true;
+        authBtn.textContent = '...';
+        try {
+            const res = await fetch('/api/verify-email', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: pendingEmail, code })
+            });
+            const data = await res.json();
+            if (data.error) { showAuthError(data.error); authBtn.disabled = false; authBtn.textContent = 'Verify'; return; }
+            token = data.token;
+            currentUser = data.user;
+            localStorage.setItem('token', token);
+            localStorage.setItem('currentUser', currentUser);
+            authOverlay.classList.remove('show');
+            authEmail.value = '';
+            authPass.value = '';
+            authCode.value = '';
+            authError.style.display = 'none';
+            authBtn.disabled = false;
+            authBtn.textContent = 'Create Account';
+            waitingVerification = false;
+            document.getElementById('fieldCode').style.display = 'none';
+            document.getElementById('fieldEmail').style.display = '';
+            document.getElementById('fieldPass').style.display = '';
+            document.getElementById('authToggle').style.display = '';
+            updateDropdown();
+            initApp();
+        } catch (e) { showAuthError('Connection failed'); authBtn.disabled = false; authBtn.textContent = 'Verify'; }
+        return;
+    }
+
+    const email = authEmail.value.trim();
     const password = authPass.value;
-    if (!username || !password) { showAuthError('Fill all fields'); return; }
+    if (!email || !password) { showAuthError('Fill all fields'); return; }
     if (isRegister && password.length < 8) { showAuthError('Password must be at least 8 characters'); return; }
 
     authBtn.disabled = true;
     authBtn.textContent = '...';
 
     const endpoint = isRegister ? '/api/register' : '/api/login';
-    const body = isRegister ? { username, password, first_name: document.getElementById('authFirst').value.trim(), last_name: document.getElementById('authLast').value.trim() } : { username, password };
+    const body = isRegister ? { email, password } : { email, password };
     try {
         const res = await fetch(endpoint, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1435,12 +1473,27 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
         });
         const data = await res.json();
         if (data.error) { showAuthError(data.error); authBtn.disabled = false; authBtn.textContent = isRegister ? 'Create Account' : 'Log In'; return; }
+        if (data.message === 'Verification code sent') {
+            // Step 1 done — show code input
+            pendingEmail = email;
+            waitingVerification = true;
+            document.getElementById('fieldCode').style.display = '';
+            document.getElementById('fieldEmail').style.display = 'none';
+            document.getElementById('fieldPass').style.display = 'none';
+            document.getElementById('authToggle').style.display = 'none';
+            authBtn.textContent = 'Verify';
+            authBtn.disabled = false;
+            authCode.value = '';
+            authCode.focus();
+            showAuthError('A verification code has been sent to your email');
+            return;
+        }
         token = data.token;
         currentUser = data.user;
         localStorage.setItem('token', token);
         localStorage.setItem('currentUser', currentUser);
         authOverlay.classList.remove('show');
-        authUser.value = '';
+        authEmail.value = '';
         authPass.value = '';
         authError.style.display = 'none';
         authBtn.disabled = false;
