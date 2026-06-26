@@ -1023,59 +1023,6 @@ print(f"Natural log of 1000: {math.log(1000):.4f}")
 `;
 let auth = null;
 let currentUser = localStorage.getItem('currentUser');
-
-try {
-  const firebaseConfig = {
-    apiKey: "AIzaSyDLQ47ucqfCVAqx5EIKb9C0tH-daVRmgkk",
-    authDomain: "uscrovis.firebaseapp.com",
-    projectId: "uscrovis",
-    storageBucket: "uscrovis.firebasestorage.app",
-    messagingSenderId: "1062196446955",
-    appId: "1:1062196446955:web:7cc30ca305192ff755e0ae",
-    measurementId: "G-22SHPCXXSV"
-  };
-  firebase.initializeApp(firebaseConfig);
-  auth = firebase.auth();
-} catch (e) {
-  console.warn('Firebase init failed:', e.message);
-  auth = null;
-}
-
-function onAuth(cb) {
-  if (auth) { cb(auth); }
-}
-
-// Immediate init from localStorage to avoid flicker
-if (currentUser) {
-  updateDropdown();
-  document.getElementById('sidebarFooter').style.display = 'flex';
-  loadFileTree();
-  setTimeout(() => openFile('main.py'), 100);
-} else {
-  showGuestSidebar();
-  updateDropdown();
-}
-
-// Firebase confirms or corrects the session
-if (auth) {
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      if (currentUser !== user.email) {
-        currentUser = user.email;
-        localStorage.setItem('currentUser', currentUser);
-        updateDropdown();
-        document.getElementById('sidebarFooter').style.display = 'flex';
-        loadFileTree();
-        setTimeout(() => openFile('main.py'), 100);
-      }
-    } else {
-      currentUser = null;
-      localStorage.removeItem('currentUser');
-      showGuestSidebar();
-      updateDropdown();
-    }
-  });
-}
 let currentFilePath = 'main.py';
 let currentDir = '';
 let cm = null;
@@ -1405,8 +1352,57 @@ function showGuestSidebar() {
     fileTree.innerHTML = '<div style="padding:30px 20px;text-align:center;color:#888;font-size:13px;line-height:1.8">Log in<br>to use the file explorer<br><br><button style="background:linear-gradient(135deg,#238636,#2ea043);border:none;color:#fff;padding:8px 24px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;margin-top:6px;transition:all 0.2s" onclick="showAuth()">Log in</button></div>';
 }
 
+// ===== FIREBASE INIT =====
+try {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDLQ47ucqfCVAqx5EIKb9C0tH-daVRmgkk",
+    authDomain: "uscrovis.firebaseapp.com",
+    projectId: "uscrovis",
+    storageBucket: "uscrovis.firebasestorage.app",
+    messagingSenderId: "1062196446955",
+    appId: "1:1062196446955:web:7cc30ca305192ff755e0ae",
+    measurementId: "G-22SHPCXXSV"
+  };
+  firebase.initializeApp(firebaseConfig);
+  auth = firebase.auth();
+} catch (e) {
+  console.warn('Firebase init failed:', e.message);
+  auth = null;
+}
+
+// Immediate init from localStorage to avoid flicker
+if (currentUser) {
+  updateDropdown();
+  document.getElementById('sidebarFooter').style.display = 'flex';
+  loadFileTree();
+  setTimeout(() => openFile('main.py'), 100);
+} else {
+  showGuestSidebar();
+  updateDropdown();
+}
+
+// Firebase confirms or corrects the session
+if (auth) {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      if (currentUser !== user.email) {
+        currentUser = user.email;
+        localStorage.setItem('currentUser', currentUser);
+        updateDropdown();
+        document.getElementById('sidebarFooter').style.display = 'flex';
+        loadFileTree();
+        setTimeout(() => openFile('main.py'), 100);
+      }
+    } else {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      showGuestSidebar();
+      updateDropdown();
+    }
+  });
+}
+
 // ===== INIT =====
-// Auth state is handled by onAuthStateChanged above
 setTimeout(() => { if (cm) cm.refresh(); }, 500);
 setTimeout(() => { const el = document.getElementById('splashScreen'); if (el) el.remove(); }, 4000);
 
