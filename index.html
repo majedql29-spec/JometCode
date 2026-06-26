@@ -12,8 +12,6 @@
 <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-<link rel="preconnect" href="https://oikzwjqyctureqkcigrx.supabase.co">
-<link rel="dns-prefetch" href="https://oikzwjqyctureqkcigrx.supabase.co">
 <link rel="icon" href="/logo.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/logo.png" type="image/png" sizes="96x96">
 <link rel="apple-touch-icon" href="/logo.png" sizes="180x180">
@@ -208,53 +206,65 @@ body {
 }
 #authOverlay.show { display: flex; }
 .auth-box {
-    background: #161b22; border: 1px solid #30363d; border-radius: 14px;
-    padding: 44px 40px 34px; width: 460px; position: relative;
+    background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+    padding: 40px 36px 32px; width: 420px; position: relative;
     box-shadow: 0 24px 64px rgba(0,0,0,0.6);
     animation: authPop 0.3s ease;
 }
 @keyframes authPop {
-    0% { opacity: 0; transform: scale(0.9) translateY(10px); }
+    0% { opacity: 0; transform: scale(0.92) translateY(12px); }
     100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-.auth-box::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0;
-    height: 3px; background: linear-gradient(90deg, #238636, #4ec9b0);
-    border-radius: 12px 12px 0 0;
-}
 .auth-box .auth-close {
-    position: absolute; top: 12px; right: 16px;
+    position: absolute; top: 12px; right: 14px;
     background: none; border: none; color: #555; font-size: 18px;
-    cursor: pointer; padding: 2px 6px; border-radius: 4px;
-    transition: all 0.15s;
+    cursor: pointer; padding: 4px 8px; border-radius: 6px;
+    transition: all 0.15s; line-height: 1;
 }
 .auth-box .auth-close:hover { color: #e6edf3; background: #21262d; }
-.auth-box .auth-icon {
-    width: 48px; height: 48px; border-radius: 12px;
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px;
-}
-.auth-box .auth-icon img { width: 100%; height: 100%; object-fit: cover; }
 .auth-box h2 {
-    color: #e6edf3; font-size: 20px; font-weight: 600;
-    text-align: center; margin-bottom: 4px;
+    color: #e6edf3; font-size: 22px; font-weight: 700;
+    text-align: center; margin-bottom: 8px; letter-spacing: -0.3px;
 }
 .auth-box .auth-sub {
     text-align: center; color: #8b949e; font-size: 13px;
-    margin-bottom: 24px;
+    margin-bottom: 28px; line-height: 1.5;
 }
+/* === Social Buttons === */
+.auth-social { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.auth-social-btn {
+    width: 100%; padding: 11px 16px; border-radius: 8px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; display: flex; align-items: center;
+    justify-content: center; gap: 10px; border: 1px solid #30363d;
+    background: #0d1117; color: #e6edf3; font-family: inherit;
+}
+.auth-social-btn:hover { background: #161b22; border-color: #4ec9b0; transform: translateY(-1px); }
+.auth-social-btn:active { transform: translateY(0); }
+.auth-social-btn .s-icon { font-size: 20px; width: 24px; text-align: center; flex-shrink: 0; }
+.auth-social-btn.github-btn { background: #1b1f23; border-color: #333; }
+.auth-social-btn.github-btn:hover { background: #22262b; border-color: #8b949e; }
+.auth-social-btn.google-btn { background: #fff; color: #1e1e1e; border-color: #dadce0; }
+.auth-social-btn.google-btn:hover { background: #f8f9fa; border-color: #4ec9b0; }
+/* === Divider === */
+.auth-divider {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    color: #484f58; font-size: 12px;
+}
+.auth-divider::before, .auth-divider::after {
+    content: ''; flex: 1; height: 1px; background: #21262d;
+}
+/* === Form === */
 .auth-box .auth-field {
-    position: relative; margin-bottom: 14px;
+    margin-bottom: 14px;
 }
-.auth-row { display: flex; gap: 12px; }
 .auth-box .auth-field label {
     display: block; font-size: 12px; color: #8b949e;
-    margin-bottom: 4px; font-weight: 500;
+    margin-bottom: 5px; font-weight: 500;
 }
 .auth-box .auth-field input {
     width: 100%; padding: 10px 12px;
-    background: #0d1117; border: 1px solid #30363d; border-radius: 6px;
+    background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
     color: #e6edf3; font-size: 14px; outline: none;
     transition: border-color 0.2s;
 }
@@ -263,28 +273,29 @@ body {
 }
 .auth-box .auth-field input::placeholder { color: #484f58; }
 .auth-box .auth-btn {
-    width: 100%; padding: 11px; border: none; border-radius: 6px;
+    width: 100%; padding: 11px; border: none; border-radius: 8px;
     background: linear-gradient(135deg, #238636, #2ea043);
     color: #fff; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px;
+    cursor: pointer; transition: all 0.2s;
 }
 .auth-box .auth-btn:hover { background: linear-gradient(135deg, #2ea043, #3fb950); transform: translateY(-1px); }
 .auth-box .auth-btn:active { transform: translateY(0); }
+.auth-box .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 .auth-box .auth-error {
     color: #f85149; font-size: 13px; margin-bottom: 12px; display: none;
-    background: rgba(248,81,73,0.1); padding: 8px 12px; border-radius: 6px;
-    border: 1px solid rgba(248,81,73,0.2);
+    background: rgba(248,81,73,0.1); padding: 8px 12px; border-radius: 8px;
+    border: 1px solid rgba(248,81,73,0.2); line-height: 1.4;
 }
 .auth-box .auth-toggle {
     text-align: center; margin-top: 18px; font-size: 13px; color: #8b949e;
     padding-top: 16px; border-top: 1px solid #21262d;
 }
-.auth-box .auth-toggle span { color: #4ec9b0; cursor: pointer; font-weight: 500; }
-.auth-box .auth-toggle span:hover { text-decoration: underline; }
+.auth-box .auth-toggle a { color: #4ec9b0; cursor: pointer; font-weight: 500; }
+.auth-box .auth-toggle a:hover { text-decoration: underline; }
 
 .pw-strength { display: none; margin-top: 8px; align-items: center; gap: 8px; }
 .pw-strength.show { display: flex; }
-.pw-bar { height: 4px; flex: 1; border-radius: 4px; background: #30363d; transition: all 0.2s; overflow: hidden; }
+.pw-bar { height: 4px; flex: 1; border-radius: 4px; background: #30363d; overflow: hidden; }
 .pw-bar-fill { height: 100%; border-radius: 4px; transition: all 0.25s; width: 0%; }
 .pw-label { font-size: 11px; color: #8b949e; min-width: 50px; text-align: left; white-space: nowrap; }
 /* ===== HEADER ===== */
@@ -573,14 +584,25 @@ body.light-mode #infoContent p { color: #555; }
 body.light-mode #infoContent kbd { background: #fff; border-color: #d0d7de; }
 body.light-mode #infoContent .shortcut-row { border-bottom-color: #f0f0f0; }
 body.light-mode #infoContent .shortcut-row span:first-child { color: #555; }
-body.light-mode .auth-box { background: #f6f8fa; border-color: #d0d7de; }
-body.light-mode .auth-box .auth-close { color: #555; }
-body.light-mode .auth-box .auth-close:hover { color: #1e1e1e; background: #e8e8e8; }
+body.light-mode #authOverlay { background: rgba(255,255,255,0.7); }
+body.light-mode .auth-box { background: #fff; border-color: #d0d7de; }
+body.light-mode .auth-box .auth-close { color: #888; }
+body.light-mode .auth-box .auth-close:hover { color: #1e1e1e; background: #f0f0f0; }
 body.light-mode .auth-box h2 { color: #1e1e1e; }
 body.light-mode .auth-box .auth-sub { color: #656d76; }
+body.light-mode .auth-social-btn { background: #f6f8fa; border-color: #d0d7de; color: #1e1e1e; }
+body.light-mode .auth-social-btn:hover { background: #f0f2f5; border-color: #238636; }
+body.light-mode .auth-social-btn.github-btn { background: #24292f; color: #fff; border-color: #24292f; }
+body.light-mode .auth-social-btn.github-btn:hover { background: #2c3238; border-color: #238636; }
+body.light-mode .auth-social-btn.google-btn { background: #fff; color: #1e1e1e; border-color: #dadce0; }
+body.light-mode .auth-social-btn.google-btn:hover { background: #f8f9fa; border-color: #238636; }
+body.light-mode .auth-divider { color: #888; }
+body.light-mode .auth-divider::before, body.light-mode .auth-divider::after { background: #d0d7de; }
 body.light-mode .auth-box .auth-field label { color: #656d76; }
 body.light-mode .auth-box .auth-field input { background: #fff; border-color: #d0d7de; color: #1e1e1e; }
 body.light-mode .auth-box .auth-field input:focus { border-color: #238636; }
+body.light-mode .auth-box .auth-btn { background: linear-gradient(135deg,#238636,#2ea043); }
+body.light-mode .auth-box .auth-btn:hover { background: linear-gradient(135deg,#2ea043,#3fb950); }
 body.light-mode .auth-box .auth-toggle { color: #656d76; border-top-color: #d0d7de; }
 
 body.light-mode #splashScreen { background: #fff; }
@@ -767,32 +789,35 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
 <div id="authOverlay">
     <div class="auth-box">
         <button class="auth-close" id="authClose">✕</button>
-        <div class="auth-icon"><img src="logo.png" alt="Uscrovis icon"></div>
-        <h2 id="authTitle">Welcome Back</h2>
-        <div class="auth-sub" id="authSub">Log in to use the explorer</div>
+        <h2 id="authTitle">Welcome to Uscrovis</h2>
+        <div class="auth-sub" id="authSub">Sign in to save your projects in the cloud</div>
         <div class="auth-error" id="authError"></div>
+        <div class="auth-social">
+            <button type="button" class="auth-social-btn github-btn" onclick="handleOAuth('github')">
+                <span class="s-icon">⬡</span> Continue with GitHub
+            </button>
+            <button type="button" class="auth-social-btn google-btn" onclick="handleOAuth('google')">
+                <span class="s-icon" style="color:#4285f4;font-weight:700">G</span> Continue with Google
+            </button>
+        </div>
+        <div class="auth-divider">or continue with email</div>
         <form id="authForm" onsubmit="return false">
             <div class="auth-field" id="fieldEmail">
                 <label>Email</label>
-                <input type="email" id="authEmail" placeholder="Enter your email" autocomplete="off">
+                <input type="email" id="authEmail" placeholder="name@example.com" autocomplete="email">
             </div>
             <div class="auth-field" id="fieldPass">
                 <label>Password</label>
-                <input type="password" id="authPass" placeholder="Enter password">
+                <input type="password" id="authPass" placeholder="Enter password" autocomplete="current-password">
                 <div class="pw-strength" id="pwStrength">
                     <div class="pw-bar" id="pwBar"></div>
                     <span class="pw-label" id="pwLabel"></span>
                 </div>
             </div>
-            <div class="auth-field" id="fieldCode" style="display:none">
-                <label>Verification Code</label>
-                <input type="text" id="authCode" placeholder="Enter 6-digit code" maxlength="6" autocomplete="off" inputmode="numeric">
-                <div style="font-size:12px;color:#8b949e;margin-top:4px">We sent a code to your email</div>
-            </div>
-            <button class="auth-btn" id="authBtn" type="submit">Log In</button>
+            <button class="auth-btn" id="authBtn" type="submit">Continue</button>
         </form>
         <div class="auth-toggle" id="authToggle">
-            Don't have an account? <span id="authToggleLink">Create Account</span>
+            <span id="authToggleText">Don't have an account?</span> <a id="authToggleLink">Sign up</a>
         </div>
     </div>
 </div>
@@ -906,6 +931,8 @@ body.light-mode #mobileToggle:hover { background: #d0d0d0; }
     </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
@@ -994,18 +1021,49 @@ print(f"Euler's number (approx): {e}")
 print(f"Golden ratio: {(1 + math.sqrt(5)) / 2}")
 print(f"Natural log of 1000: {math.log(1000):.4f}")
 `;
+const firebaseConfig = {
+  apiKey: "AIzaSyDLQ47ucqfCVAqx5EIKb9C0tH-daVRmgkk",
+  authDomain: "uscrovis.firebaseapp.com",
+  projectId: "uscrovis",
+  storageBucket: "uscrovis.firebasestorage.app",
+  messagingSenderId: "1062196446955",
+  appId: "1:1062196446955:web:7cc30ca305192ff755e0ae",
+  measurementId: "G-22SHPCXXSV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
 let currentUser = localStorage.getItem('currentUser');
-let token = localStorage.getItem('token');
-// check for stored token
-(function(){
-    const qt = new URLSearchParams(location.search).get('oauth_token');
-    if (qt) {
-        token = qt;
-        localStorage.setItem('token', qt);
-        const clean = location.origin + location.pathname;
-        history.replaceState(null, '', clean);
+
+// Immediate init from localStorage to avoid flicker
+if (currentUser) {
+  updateDropdown();
+  document.getElementById('sidebarFooter').style.display = 'flex';
+  loadFileTree();
+  setTimeout(() => openFile('main.py'), 100);
+} else {
+  showGuestSidebar();
+  updateDropdown();
+}
+
+// Firebase confirms or corrects the session
+auth.onAuthStateChanged(user => {
+  if (user) {
+    if (currentUser !== user.email) {
+      currentUser = user.email;
+      localStorage.setItem('currentUser', currentUser);
+      updateDropdown();
+      document.getElementById('sidebarFooter').style.display = 'flex';
+      loadFileTree();
+      setTimeout(() => openFile('main.py'), 100);
     }
-})();
+  } else {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    showGuestSidebar();
+    updateDropdown();
+  }
+});
 let currentFilePath = 'main.py';
 let currentDir = '';
 let cm = null;
@@ -1074,13 +1132,13 @@ CodeMirror.registerHelper("hint", "python", function(cm) {
 
     let saveTimer;
     cm.on("change", function() {
-        if (token) { clearTimeout(saveTimer); saveTimer = setTimeout(saveCurrentFile, 1500); }
+        if (currentUser) { clearTimeout(saveTimer); saveTimer = setTimeout(saveCurrentFile, 1500); }
         else { clearTimeout(saveTimer); saveTimer = setTimeout(() => localStorage.setItem('guestCode', cm.getValue()), 2000); }
     });
 
     const guestCode = localStorage.getItem('guestCode');
-    if (guestCode && !token) cm.setValue(guestCode);
-    else if (!token) cm.setValue(DEFAULT_CODE);
+    if (guestCode && !currentUser) cm.setValue(guestCode);
+    else if (!currentUser) cm.setValue(DEFAULT_CODE);
 } catch (e) {
     console.warn('CodeMirror error:', e.message);
 }
@@ -1092,12 +1150,10 @@ const clearBtn = document.getElementById('clearBtn');
 const authOverlay = document.getElementById('authOverlay');
 const authTitle = document.getElementById('authTitle');
 const authEmail = document.getElementById('authEmail');
-const authCode = document.getElementById('authCode');
 const authPass = document.getElementById('authPass');
 const authBtn = document.getElementById('authBtn');
 const authError = document.getElementById('authError');
 const authToggleLink = document.getElementById('authToggleLink');
-const authSub = document.getElementById('authSub');
 const fileTree = document.getElementById('fileTree');
 const newFileBtn = document.getElementById('newFileBtn');
 const newFolderBtn = document.getElementById('newFolderBtn');
@@ -1132,7 +1188,7 @@ function updateDropdown() {
     const suName = document.getElementById('suName');
     const setLogin = document.getElementById('setLogin');
     const setLogout = document.getElementById('setLogout');
-    if (token) {
+    if (currentUser) {
         const initial = currentUser.charAt(0).toUpperCase();
         avatar.textContent = initial;
         name.textContent = currentUser;
@@ -1175,15 +1231,11 @@ document.getElementById('fileTree').addEventListener('click', () => {
 document.getElementById('setLogin').addEventListener('click', () => { closeSettings(); showAuth(); });
 document.getElementById('setLogout').addEventListener('click', () => {
     closeSettings();
-    token = null; currentUser = null;
-    localStorage.removeItem('token');
-    localStorage.removeItem('currentUser');
     openFileLabel.style.display = 'none';
     if (cm) cm.setValue(localStorage.getItem('guestCode') || DEFAULT_CODE);
     currentFilePath = '';
     editorTab.textContent = '📄 Editor';
-    showGuestSidebar();
-    updateDropdown();
+    auth.signOut();
 });
 document.getElementById('setDownload').addEventListener('click', async () => {
     const files = getFileIndex();
@@ -1318,9 +1370,6 @@ updateHandles();
 applyResizeSizes();
 
 let isRegister = false;
-let waitingVerification = false;
-let pendingEmail = '';
-let authCallback = null;
 let modalCallback = null;
 
 function showModal(title, sub, placeholder, cb) {
@@ -1344,8 +1393,7 @@ function showGuestSidebar() {
 }
 
 // ===== INIT =====
-if (token) initApp();
-else showGuestSidebar();
+// Auth state is handled by onAuthStateChanged above
 setTimeout(() => { if (cm) cm.refresh(); }, 500);
 setTimeout(() => { const el = document.getElementById('splashScreen'); if (el) el.remove(); }, 4000);
 
@@ -1354,14 +1402,15 @@ if (localStorage.getItem('theme') === 'light') { document.body.classList.add('li
 // ===== AUTH =====
 function showAuth(cb) {
     isRegister = false;
-    authTitle.textContent = 'Welcome Back';
-    authSub.textContent = 'Log in to use the explorer';
-    authBtn.textContent = 'Log In';
-    authToggleLink.textContent = 'Create Account';
-    const parent = authToggleLink.parentElement;
-    const textBefore = parent.childNodes[0];
-    if (textBefore) textBefore.textContent = "Don't have an account? ";
-    authCallback = cb;
+    authTitle.textContent = 'Welcome to Uscrovis';
+    authSub.textContent = 'Sign in to save your projects in the cloud';
+    authBtn.textContent = 'Continue';
+    document.getElementById('authToggleText').textContent = "Don't have an account?";
+    authToggleLink.textContent = 'Sign up';
+    document.getElementById('authToggle').style.display = '';
+    authError.style.display = 'none';
+    authPass.value = '';
+    pwStrength.classList.remove('show');
     authOverlay.classList.add('show');
 }
 
@@ -1369,18 +1418,11 @@ document.getElementById('authClose').addEventListener('click', () => { authOverl
 
 authToggleLink.addEventListener('click', () => {
     isRegister = !isRegister;
-    waitingVerification = false;
-    authTitle.textContent = isRegister ? 'Create Account' : 'Welcome Back';
-    authSub.textContent = isRegister ? 'Create an account to use the explorer' : 'Log in to use the explorer';
-    authBtn.textContent = isRegister ? 'Create Account' : 'Log In';
-    authToggleLink.textContent = isRegister ? 'Log In' : 'Create Account';
-    document.getElementById('authToggle').style.display = isRegister ? 'none' : '';
-    const parent = authToggleLink.parentElement;
-    const textBefore = parent.childNodes[0];
-    if (textBefore) textBefore.textContent = isRegister ? 'Already have an account? ' : "Don't have an account? ";
-    document.getElementById('fieldCode').style.display = 'none';
-    document.getElementById('fieldEmail').style.display = '';
-    document.getElementById('fieldPass').style.display = '';
+    authTitle.textContent = isRegister ? 'Create your account' : 'Welcome to Uscrovis';
+    authSub.textContent = isRegister ? 'Start coding and save your projects' : 'Sign in to save your projects in the cloud';
+    authBtn.textContent = isRegister ? 'Sign up' : 'Continue';
+    authToggleLink.textContent = isRegister ? 'Log in' : 'Sign up';
+    document.getElementById('authToggleText').textContent = isRegister ? 'Already have an account?' : "Don't have an account?";
     authError.style.display = 'none';
     authPass.value = '';
     pwStrength.classList.remove('show');
@@ -1421,87 +1463,51 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (authBtn.disabled) return;
 
-    if (waitingVerification) {
-        // Step 2: verify code
-        const code = authCode.value.trim();
-        if (!code) { showAuthError('Enter the verification code'); return; }
-        authBtn.disabled = true;
-        authBtn.textContent = '...';
-        try {
-            const res = await fetch('/api/verify-email', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: pendingEmail, code })
-            });
-            const data = await res.json();
-            if (data.error) { showAuthError(data.error); authBtn.disabled = false; authBtn.textContent = 'Verify'; return; }
-            token = data.token;
-            currentUser = data.user;
-            localStorage.setItem('token', token);
-            localStorage.setItem('currentUser', currentUser);
-            authOverlay.classList.remove('show');
-            authEmail.value = '';
-            authPass.value = '';
-            authCode.value = '';
-            authError.style.display = 'none';
-            authBtn.disabled = false;
-            authBtn.textContent = 'Create Account';
-            waitingVerification = false;
-            document.getElementById('fieldCode').style.display = 'none';
-            document.getElementById('fieldEmail').style.display = '';
-            document.getElementById('fieldPass').style.display = '';
-            document.getElementById('authToggle').style.display = '';
-            updateDropdown();
-            initApp();
-        } catch (e) { showAuthError('Connection failed'); authBtn.disabled = false; authBtn.textContent = 'Verify'; }
-        return;
-    }
-
     const email = authEmail.value.trim();
     const password = authPass.value;
     if (!email || !password) { showAuthError('Fill all fields'); return; }
     if (isRegister && password.length < 8) { showAuthError('Password must be at least 8 characters'); return; }
 
     authBtn.disabled = true;
-    authBtn.textContent = '...';
+    authBtn.textContent = 'Working...';
 
-    const endpoint = isRegister ? '/api/register' : '/api/login';
-    const body = isRegister ? { email, password } : { email, password };
     try {
-        const res = await fetch(endpoint, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-        const data = await res.json();
-        if (data.error) { showAuthError(data.error); authBtn.disabled = false; authBtn.textContent = isRegister ? 'Create Account' : 'Log In'; return; }
-        if (data.message === 'Verification code sent') {
-            // Step 1 done — show code input
-            pendingEmail = email;
-            waitingVerification = true;
-            document.getElementById('fieldCode').style.display = '';
-            document.getElementById('fieldEmail').style.display = 'none';
-            document.getElementById('fieldPass').style.display = 'none';
-            document.getElementById('authToggle').style.display = 'none';
-            authBtn.textContent = 'Verify';
-            authBtn.disabled = false;
-            authCode.value = '';
-            authCode.focus();
-            showAuthError('A verification code has been sent to your email');
-            return;
+        if (isRegister) {
+            await auth.createUserWithEmailAndPassword(email, password);
+        } else {
+            await auth.signInWithEmailAndPassword(email, password);
         }
-        token = data.token;
-        currentUser = data.user;
-        localStorage.setItem('token', token);
-        localStorage.setItem('currentUser', currentUser);
         authOverlay.classList.remove('show');
         authEmail.value = '';
         authPass.value = '';
         authError.style.display = 'none';
+    } catch (err) {
+        const msg = err.code === 'auth/email-already-in-use' ? 'This email is already registered. Try logging in instead.'
+            : err.code === 'auth/user-not-found' ? 'No account with this email. Create one first.'
+            : err.code === 'auth/wrong-password' ? 'Incorrect password. Try again.'
+            : err.code === 'auth/invalid-credential' ? 'Invalid email or password. Check your details.'
+            : err.code === 'auth/too-many-requests' ? 'Too many attempts. Try again later.'
+            : err.code === 'auth/configuration-not-found' ? 'This sign-in method is not enabled. Contact the site owner.'
+            : err.code === 'auth/popup-closed-by-user' ? 'Sign-in popup was closed before completing.'
+            : err.code === 'auth/cancelled-popup-request' ? 'Sign-in cancelled.'
+            : err.message;
+        showAuthError(msg);
+    } finally {
         authBtn.disabled = false;
-        authBtn.textContent = isRegister ? 'Create Account' : 'Log In';
-        updateDropdown();
-        initApp();
-    } catch (e) { showAuthError('Connection failed'); authBtn.disabled = false; authBtn.textContent = isRegister ? 'Create Account' : 'Log In'; }
+        authBtn.textContent = isRegister ? 'Sign up' : 'Continue';
+    }
 });
+
+function handleOAuth(provider) {
+    const prov = provider === 'google'
+        ? new firebase.auth.GoogleAuthProvider()
+        : new firebase.auth.GithubAuthProvider();
+    auth.signInWithPopup(prov).then(() => {
+        authOverlay.classList.remove('show');
+    }).catch(err => {
+        showAuthError(err.message);
+    });
+}
 
 function showAuthError(msg) {
     authError.textContent = msg; authError.style.display = 'block';
@@ -1519,13 +1525,6 @@ document.getElementById('infoOverlay').addEventListener('click', (e) => {
         document.getElementById('infoOverlay').classList.remove('show');
     }
 });
-
-// ===== APP INIT =====
-function initApp() {
-    document.getElementById('sidebarFooter').style.display = 'flex';
-    loadFileTree();
-    setTimeout(() => openFile('main.py'), 100);
-}
 
 // ===== FILE TREE =====
 function getFileIndex() {
@@ -1608,7 +1607,7 @@ function setFC(path, c) { localStorage.setItem(fcKey(path), c); }
 function removeFC(path) { localStorage.removeItem(fcKey(path)); }
 
 function loadFileTree() {
-    if (!token) return;
+    if (!currentUser) return;
     renderTree(getFileIndex(), fileTree, '');
     document.querySelectorAll('.file-item.target').forEach(el => el.classList.remove('target'));
     if (currentDir) {
@@ -1763,7 +1762,7 @@ function findEntry(files, path) {
 }
 
 function renameItem(oldPath, newName) {
-    if (!token) return;
+    if (!currentUser) return;
     const files = getFileIndex();
     const found = findEntry(files, oldPath);
     if (!found) return;
@@ -1780,7 +1779,7 @@ function renameItem(oldPath, newName) {
 }
 
 function openFile(path) {
-    if (!token) return;
+    if (!currentUser) return;
     currentFilePath = path;
     cm.setValue(getFC(path));
     editorTab.textContent = '📄 ' + path.split('/').pop();
@@ -1790,12 +1789,12 @@ function openFile(path) {
 }
 
 function saveCurrentFile() {
-    if (!token || !currentFilePath) return;
+    if (!currentUser || !currentFilePath) return;
     setFC(currentFilePath, cm.getValue());
 }
 
 function createItem(name, type) {
-    if (!token) return;
+    if (!currentUser) return;
     const files = getFileIndex();
     const fullPath = currentDir ? currentDir + '/' + name : name;
     const entry = { name, path: fullPath, type };
@@ -1820,7 +1819,7 @@ function removeContentRecursive(entry) {
     else if (entry.children) entry.children.forEach(removeContentRecursive);
 }
 function deleteItem(path) {
-    if (!token) return;
+    if (!currentUser) return;
     if (!confirm('Delete ' + path + '?')) return;
     const files = getFileIndex();
     const found = findEntry(files, path);
@@ -1840,9 +1839,7 @@ runBtn.addEventListener('click', async () => {
     runBtn.disabled = true; runBtn.textContent = '...';
 
     try {
-        const headers = { 'Content-Type': 'application/json' };
-        if (token) headers['Authorization'] = 'Bearer ' + token;
-        const res = await fetch('/api/run', { method: 'POST', headers, body: JSON.stringify({ code }) });
+        const res = await fetch('/api/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
         const data = await res.json();
         if (data.output) output.innerHTML += data.output.replace(/\n/g, '<br>');
         if (data.error) output.innerHTML += '<span class="error">' + data.error.replace(/\n/g, '<br>') + '</span>';
