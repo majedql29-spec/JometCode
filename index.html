@@ -1381,6 +1381,15 @@ if (currentUser) {
   updateDropdown();
 }
 
+// Handle OAuth redirect result
+if (auth) {
+  auth.getRedirectResult().catch(err => {
+    if (err.code && err.code !== 'auth/credential-already-in-use') {
+      console.warn('OAuth redirect error:', err.code);
+    }
+  });
+}
+
 // Firebase confirms or corrects the session
 if (auth) {
   auth.onAuthStateChanged(user => {
@@ -1515,16 +1524,8 @@ function handleOAuth(provider) {
         const prov = provider === 'google'
             ? new firebase.auth.GoogleAuthProvider()
             : new firebase.auth.GithubAuthProvider();
-        auth.signInWithPopup(prov).then(() => {
-            authOverlay.classList.remove('show');
-        }).catch(err => {
-            const msg = err.code === 'auth/operation-not-allowed' ? 'This sign-in method is not enabled in Firebase Console. Enable it there first.'
-                : err.code === 'auth/configuration-not-found' ? 'OAuth configuration missing in Firebase Console.'
-                : err.code === 'auth/popup-closed-by-user' ? 'Sign-in popup was closed.'
-                : err.code === 'auth/cancelled-popup-request' ? 'Sign-in cancelled.'
-                : err.message;
-            showAuthError(msg);
-        });
+        prov.setCustomParameters({ prompt: 'select_account' });
+        auth.signInWithRedirect(prov);
     } catch (err) {
         showAuthError(err.message);
     }
