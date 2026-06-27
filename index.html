@@ -823,65 +823,7 @@ body.light-mode .cm-comment { color: #a0a0a0 !important; }
 body.light-mode .cm-def { color: #4070a0 !important; }
 body.light-mode .cm-builtin { color: #c18401 !important; }
 body.light-mode .cm-variable { color: #333 !important; }
-/* ===== SEO FOOTER ===== */
-.seo-footer {
-    background: #0d1117;
-    border-top: 1px solid #21262d;
-    padding: 48px 24px 24px;
-    color: #8b949e;
-    font-size: 14px;
-    line-height: 1.7;
-}
-.seo-footer-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 40px;
-}
-.seo-footer-col h2 {
-    color: #e6edf3;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    letter-spacing: -0.2px;
-}
-.seo-footer-col p, .seo-footer-col ol {
-    margin-bottom: 12px;
-    color: #8b949e;
-}
-.seo-footer-col ol {
-    padding-left: 18px;
-}
-.seo-footer-col ol li {
-    margin-bottom: 8px;
-}
-.seo-footer-col strong { color: #e6edf3; }
-.seo-footer-bottom {
-    max-width: 1100px;
-    margin: 32px auto 0;
-    padding-top: 20px;
-    border-top: 1px solid #21262d;
-    display: flex;
-    gap: 20px;
-    font-size: 13px;
-    color: #484f58;
-    flex-wrap: wrap;
-}
-.seo-footer-bottom a { color: #8b949e; text-decoration: none; transition: color 0.15s; }
-.seo-footer-bottom a:hover { color: #4ec9b0; }
-body.light-mode .seo-footer { background: #f5f5f5; border-top-color: #e0e0e0; }
-body.light-mode .seo-footer-col h2 { color: #1e1e1e; }
-body.light-mode .seo-footer-col p, body.light-mode .seo-footer-col ol { color: #555; }
-body.light-mode .seo-footer-col strong { color: #1e1e1e; }
-body.light-mode .seo-footer-bottom { border-top-color: #e0e0e0; color: #888; }
-body.light-mode .seo-footer-bottom a { color: #555; }
-body.light-mode .seo-footer-bottom a:hover { color: #238636; }
-@media (max-width: 768px) {
-    .seo-footer { padding: 32px 16px 20px; }
-    .seo-footer-inner { grid-template-columns: 1fr; gap: 24px; }
-    .seo-footer-bottom { flex-direction: column; gap: 8px; }
-}
+
 /* ===== MOBILE RESPONSIVE ===== */
 #mobileToggle { display: none; background: none; border: none; color: #8b949e; font-size: 22px; cursor: pointer; padding: 4px 10px; border-radius: 8px; transition: all 0.15s; }
 #mobileToggle:hover { background: #21262d; color: #e6edf3; }
@@ -1374,7 +1316,7 @@ document.getElementById('setAbout').addEventListener('click', () => {
     showInfo(`
         <h3>Uscrovis</h3>
         <p>Version 1.0.0</p>
-        <p style="margin-top:12px;font-size:12px;color:#888">unapi.platform@gmail.com</p>
+        <p style="margin-top:12px;font-size:12px;color:#888">uscrovis@gmail.com</p>
         <p style="font-size:12px;color:#555">2026</p>
     `);
 });
@@ -1393,7 +1335,7 @@ document.getElementById('setSettings').addEventListener('click', () => {
         <div class="shortcut-row"><span>Theme</span><span>${th}</span></div>
         <div class="shortcut-row"><span>Language</span><span>English</span></div>
         <div class="shortcut-row"><span>User</span><span>${currentUser || 'Guest'}</span></div>
-        <p style="margin-top:16px;font-size:12px;color:#888;text-align:center">unapi.platform@gmail.com</p>
+        <p style="margin-top:16px;font-size:12px;color:#888;text-align:center">uscrovis@gmail.com</p>
     `);
 });
 
@@ -1895,35 +1837,6 @@ runBtn.addEventListener('click', async () => {
 
 clearBtn.addEventListener('click', () => { output.innerHTML = ''; });
 </script>
-<footer class="seo-footer">
-    <div class="seo-footer-inner">
-        <div class="seo-footer-col">
-            <h2>Uscrovis — Free Online Python Code Editor</h2>
-            <p>Write, run, and learn Python programming online for free with Uscrovis, the browser-based Python IDE. No installation required — code Python directly in your browser from any device.</p>
-            <p>Features include <strong>Python syntax highlighting</strong> powered by CodeMirror, <strong>real Python code execution</strong> with a 10-second timeout and security sandbox, <strong>file explorer</strong> with create, rename, and delete operations, <strong>autocomplete</strong> and smart suggestions, <strong>dark and light themes</strong>, and <strong>project download as ZIP</strong>. Sign in with Google or GitHub to save your projects in browser storage.</p>
-        </div>
-        <div class="seo-footer-col">
-            <h2>Why Use Uscrovis Python IDE?</h2>
-            <p>Uscrovis is the perfect free Python editor for students learning to code, teachers demonstrating Python concepts, and developers testing algorithms quickly. With features like <strong>real-time Python execution</strong>, <strong>file management</strong>, and <strong>mobile-responsive design</strong>, you can learn Python or build projects anywhere — on desktop, tablet, or phone.</p>
-            <p>No downloads, no setup, no hidden costs. Just open your browser, write Python code, and run it instantly. Create multiple files, organize them in folders, and download your entire project when you're done.</p>
-        </div>
-        <div class="seo-footer-col">
-            <h2>How to Use the Online Python Editor</h2>
-            <ol>
-                <li><strong>Write Python code</strong> in the editor panel with syntax highlighting and autocomplete</li>
-                <li><strong>Run your code</strong> by clicking the Run button or pressing Ctrl+Enter</li>
-                <li><strong>Create files</strong> and organize them in folders using the sidebar explorer</li>
-                <li><strong>Sign in</strong> with Google, GitHub, or email to save your projects</li>
-                <li><strong>Download</strong> your entire project as a ZIP file anytime</li>
-            </ol>
-        </div>
-    </div>
-    <div class="seo-footer-bottom">
-        <span>&copy; 2026 Uscrovis. Free online Python code editor & IDE.</span>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/terms.html#privacy">Privacy Policy</a>
-        <a href="https://github.com/majedql29-spec/Unapi-">GitHub</a>
-    </div>
-</footer>
+
 </body>
 </html>
