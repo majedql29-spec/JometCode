@@ -128,7 +128,7 @@
       "name": "What is Uscrovis?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Uscrovis is a free online Python code editor that runs entirely in your browser. It features syntax highlighting via CodeMirror, file management, real Python code execution on a secure server, dark and light themes, and optional login with Google, GitHub, or username and password."
+        "text": "Uscrovis is a free online Python code editor that runs entirely in your browser. It features syntax highlighting via CodeMirror, file management, real Python code execution on a secure server, dark and light themes, and optional login with Google or GitHub."
       }
     },
     {
@@ -278,52 +278,6 @@ body {
 .auth-social-btn.github-btn:hover { background: #24292f; border-color: #8b949e; }
 .auth-social-btn.google-btn { background: #fff; color: #1e1e1e; border-color: #dadce0; }
 .auth-social-btn.google-btn:hover { background: #f8f9fa; border-color: #4ec9b0; }
-/* === Divider === */
-.auth-divider {
-    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
-    color: #484f58; font-size: 12px;
-}
-.auth-divider::before, .auth-divider::after {
-    content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #30363d, transparent);
-}
-/* === Form === */
-.auth-box .auth-field { margin-bottom: 16px; }
-.auth-box .auth-field label {
-    display: block; font-size: 12px; color: #8b949e;
-    margin-bottom: 6px; font-weight: 500; letter-spacing: 0.2px;
-}
-.auth-box .auth-field input {
-    width: 100%; padding: 12px 14px;
-    background: #0d1117; border: 1px solid #30363d; border-radius: 12px;
-    color: #e6edf3; font-size: 14px; outline: none;
-    transition: all 0.2s; font-family: inherit;
-}
-.auth-box .auth-field input:focus {
-    border-color: #4ec9b0; box-shadow: 0 0 0 3px rgba(78,201,176,0.12);
-}
-.auth-box .auth-field input::placeholder { color: #484f58; }
-.auth-box .auth-btn {
-    width: 100%; padding: 13px; border: none; border-radius: 12px;
-    background: linear-gradient(135deg, #238636, #2ea043);
-    color: #fff; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
-    letter-spacing: 0.2px;
-}
-.auth-box .auth-btn:hover { background: linear-gradient(135deg, #2ea043, #3fb950); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(46,160,67,0.3); }
-.auth-box .auth-btn:active { transform: translateY(0); }
-.auth-box .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-.auth-box .auth-error {
-    color: #f85149; font-size: 13px; margin-bottom: 14px; display: none;
-    background: rgba(248,81,73,0.08); padding: 10px 14px; border-radius: 10px;
-    border: 1px solid rgba(248,81,73,0.15); line-height: 1.5;
-}
-.auth-box .auth-toggle {
-    text-align: center; margin-top: 20px; font-size: 13px; color: #8b949e;
-    padding-top: 18px; border-top: 1px solid #21262d;
-}
-.auth-box .auth-toggle a { color: #4ec9b0; cursor: pointer; font-weight: 500; transition: all 0.2s; }
-.auth-box .auth-toggle a:hover { color: #5fd6bf; }
-
 @keyframes spinner { to { transform: rotate(360deg); } }
 .auth-social-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 .terms-checkbox { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 12.5px; color: #8b949e; line-height: 1.5; }
@@ -333,11 +287,12 @@ body {
 body.light-mode .terms-checkbox { color: #656d76; }
 body.light-mode .terms-checkbox a { color: #238636; }
 body.light-mode .terms-checkbox input[type="checkbox"] { accent-color: #238636; }
-.pw-strength { display: none; margin-top: 10px; align-items: center; gap: 10px; }
-.pw-strength.show { display: flex; }
-.pw-bar { height: 4px; flex: 1; border-radius: 4px; background: #21262d; overflow: hidden; }
-.pw-bar-fill { height: 100%; border-radius: 4px; transition: all 0.3s ease; width: 0%; }
-.pw-label { font-size: 11px; color: #8b949e; min-width: 50px; text-align: left; white-space: nowrap; }
+.auth-box .auth-field { margin-bottom: 16px; }
+.auth-box .auth-error {
+    color: #f85149; font-size: 13px; margin-bottom: 14px; display: none;
+    background: rgba(248,81,73,0.08); padding: 10px 14px; border-radius: 10px;
+    border: 1px solid rgba(248,81,73,0.15); line-height: 1.5;
+}
 /* ===== HEADER ===== */
 header {
     background: #0d1117;
@@ -802,16 +757,7 @@ body.light-mode .auth-social-btn.github-btn:disabled { background: #aaa; }
 body.light-mode .auth-social-btn.google-btn { background: #fff; color: #1e1e1e; border-color: #dadce0; }
 body.light-mode .auth-social-btn.google-btn:hover { background: #f8f9fa; border-color: #238636; }
 body.light-mode .auth-social-btn.google-btn:disabled { background: #eee; }
-body.light-mode .auth-divider { color: #888; }
-body.light-mode .auth-divider::before, body.light-mode .auth-divider::after { background: linear-gradient(90deg, transparent, #d0d7de, transparent); }
-body.light-mode .auth-box .auth-field label { color: #656d76; }
-body.light-mode .auth-box .auth-field input { background: #f6f8fa; border-color: #d0d7de; color: #1e1e1e; }
-body.light-mode .auth-box .auth-field input:focus { border-color: #238636; box-shadow: 0 0 0 3px rgba(35,134,54,0.1); }
-body.light-mode .auth-box .auth-btn { background: linear-gradient(135deg,#238636,#2ea043); }
-body.light-mode .auth-box .auth-btn:hover { background: linear-gradient(135deg,#2ea043,#3fb950); box-shadow: 0 4px 16px rgba(46,160,67,0.2); }
-body.light-mode .auth-box .auth-toggle { color: #656d76; border-top-color: #e0e0e0; }
-body.light-mode .auth-box .auth-toggle a { color: #238636; }
-body.light-mode .auth-box .auth-toggle a:hover { color: #2ea043; }
+
 body.light-mode #splashScreen { background: #fff; }
 body.light-mode .splash-title { color: #1e1e1e; }
 body.light-mode .splash-sub { color: #656d76; }
@@ -1267,13 +1213,20 @@ document.getElementById('fileTree').addEventListener('click', () => {
     }
 });
 document.getElementById('setLogin').addEventListener('click', () => { closeSettings(); showAuth(); });
-document.getElementById('setLogout').addEventListener('click', () => {
+document.getElementById('setLogout').addEventListener('click', async () => {
     closeSettings();
+    if (auth) {
+        try { await auth.signOut(); } catch (e) { console.warn('Sign-out failed:', e); }
+    }
+    currentUser = null;
+    currentFilePath = '';
+    currentDir = '';
     openFileLabel.style.display = 'none';
     if (cm) cm.setValue(localStorage.getItem('guestCode') || DEFAULT_CODE);
-    currentFilePath = '';
     editorTab.textContent = '📄 Editor';
-    if (auth) auth.signOut();
+    localStorage.removeItem('currentUser');
+    updateDropdown();
+    showGuestSidebar();
 });
 document.getElementById('setDownload').addEventListener('click', async () => {
     const files = getFileIndex();
@@ -1461,7 +1414,7 @@ if (currentUser) {
 // Firebase confirms or corrects the session
 if (auth) {
   auth.onAuthStateChanged(user => {
-    if (user) {
+    if (user && user.email) {
       if (currentUser !== user.email) {
         currentUser = user.email;
         localStorage.setItem('currentUser', currentUser);
@@ -1472,6 +1425,11 @@ if (auth) {
       }
     } else {
       currentUser = null;
+      currentFilePath = '';
+      currentDir = '';
+      openFileLabel.style.display = 'none';
+      if (cm) cm.setValue(localStorage.getItem('guestCode') || DEFAULT_CODE);
+      editorTab.textContent = '📄 Editor';
       localStorage.removeItem('currentUser');
       showGuestSidebar();
       updateDropdown();
@@ -1488,13 +1446,15 @@ if (localStorage.getItem('theme') === 'light') { document.body.classList.add('li
 // ===== AUTH =====
 function showAuth() {
     document.getElementById('termsCheck').checked = false;
-    document.getElementById('oauthGithub').disabled = true;
-    document.getElementById('oauthGoogle').disabled = true;
     authError.style.display = 'none';
     authOverlay.classList.add('show');
 }
 
 document.getElementById('authClose').addEventListener('click', () => { authOverlay.classList.remove('show'); });
+authOverlay.addEventListener('click', (e) => { if (e.target === authOverlay) authOverlay.classList.remove('show'); });
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && authOverlay.classList.contains('show')) authOverlay.classList.remove('show');
+});
 document.getElementById('oauthGithub').addEventListener('click', () => handleOAuth('github'));
 document.getElementById('oauthGoogle').addEventListener('click', () => handleOAuth('google'));
 
@@ -1507,8 +1467,11 @@ function handleOAuth(provider) {
     if (!auth || !firebase) { showAuthError('Authentication service unavailable.'); return; }
     if (!document.getElementById('termsCheck').checked) { showAuthError('You must agree to the Terms of Service'); return; }
     const btn = document.getElementById(provider === 'google' ? 'oauthGoogle' : 'oauthGithub');
-    const txt = btn.textContent;
+    const btnOther = document.getElementById(provider === 'google' ? 'oauthGithub' : 'oauthGoogle');
+    const origHTML = btn.innerHTML;
+    authError.style.display = 'none';
     btn.disabled = true;
+    btnOther.disabled = true;
     btn.innerHTML = '<span style="display:inline-block;width:20px;height:20px;border:2px solid #888;border-top-color:#4ec9b0;border-radius:50%;animation:spinner 0.6s linear infinite"></span> Connecting...';
     try {
         const prov = provider === 'google'
@@ -1519,25 +1482,33 @@ function handleOAuth(provider) {
             authOverlay.classList.remove('show');
         }).catch(err => {
             if (err.code === 'auth/popup-blocked') {
-                showAuthError('Pop-up was blocked. Please allow pop-ups for this site, or use email/password below.');
+                showAuthError('Pop-up was blocked. Please allow pop-ups for this site and try again.');
             } else if (err.code === 'auth/popup-closed-by-user') {
                 showAuthError('Sign-in popup was closed.');
             } else if (err.code === 'auth/cancelled-popup-request') {
                 showAuthError('Sign-in cancelled.');
+            } else if (err.code === 'auth/network-request-failed') {
+                showAuthError('Network error. Check your internet connection.');
             } else {
-                const msg = err.code === 'auth/operation-not-allowed' ? 'This sign-in method is not enabled in Firebase Console.'
-                    : err.code === 'auth/configuration-not-found' ? 'OAuth configuration missing in Firebase Console.'
-                    : err.message;
+                const msg = err.code === 'auth/operation-not-allowed' ? 'This sign-in method is not enabled.'
+                    : err.code === 'auth/configuration-not-found' ? 'OAuth configuration is missing.'
+                    : err.code === 'auth/too-many-requests' ? 'Too many attempts. Please try again later.'
+                    : err.code === 'auth/account-exists-with-different-credential' ? 'An account already exists with the same email using a different sign-in method.'
+                    : 'Sign-in failed. Please try again.';
                 showAuthError(msg);
+                console.warn('Auth error:', err.code, err.message);
             }
         }).finally(() => {
             btn.disabled = false;
-            btn.innerHTML = txt;
+            btnOther.disabled = false;
+            btn.innerHTML = origHTML;
         });
     } catch (err) {
-        showAuthError(err.message);
+        showAuthError('Sign-in failed. Please try again.');
+        console.warn('Auth error:', err);
         btn.disabled = false;
-        btn.innerHTML = txt;
+        btnOther.disabled = false;
+        btn.innerHTML = origHTML;
     }
 }
 
@@ -1766,7 +1737,7 @@ function renameItem(oldPath, newName) {
 }
 
 function openFile(path) {
-    if (!currentUser) return;
+    if (!currentUser || !cm) return;
     currentFilePath = path;
     cm.setValue(getFC(path));
     editorTab.textContent = '📄 ' + path.split('/').pop();
