@@ -435,7 +435,62 @@ header h1 .logo img { width: 100%; height: 100%; object-fit: cover; }
 .btn-signin:hover { background: rgba(78,201,176,0.1); }
 body.light-mode .btn-signin { color: #238636; border-color: #238636; }
 body.light-mode .btn-signin:hover { background: rgba(35,134,54,0.08); }
+.btn-learn {
+    background: transparent; color: #e6edf3; border: 1px solid #30363d; font-weight: 500; padding: 8px 14px;
+    border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 5px;
+}
+.btn-learn:hover { border-color: #4ec9b0; color: #4ec9b0; background: rgba(78,201,176,0.05); }
+.btn-learn.active { background: rgba(78,201,176,0.1); border-color: #4ec9b0; color: #4ec9b0; }
+body.light-mode .btn-learn { color: #1e1e1e; border-color: #d0d7de; }
+body.light-mode .btn-learn:hover { border-color: #238636; color: #238636; }
+body.light-mode .btn-learn.active { background: rgba(35,134,54,0.08); border-color: #238636; color: #238636; }
 .btn-sm { padding: 4px 12px; font-size: 11px; border-radius: 8px; }
+/* ===== LEARNING PANEL ===== */
+.learn-panel { display: none; flex: 1; overflow: hidden; }
+.learn-panel.show { display: flex; }
+.learn-sidebar {
+    width: 280px; flex: 0 0 auto; background: #0d1117; border-right: 1px solid #21262d;
+    overflow-y: auto; padding: 20px 0;
+}
+.learn-sidebar h3 { font-size: 11px; color: #484f58; text-transform: uppercase; letter-spacing: 1px; padding: 0 20px 12px; }
+.learn-lesson {
+    padding: 10px 20px; cursor: pointer; color: #8b949e; font-size: 13px;
+    transition: all 0.15s; border-left: 3px solid transparent;
+    display: flex; align-items: center; gap: 10px;
+}
+.learn-lesson:hover { background: #161b22; color: #e6edf3; }
+.learn-lesson.active { background: #161b22; border-left-color: #4ec9b0; color: #e6edf3; font-weight: 500; }
+.learn-lesson .num { color: #484f58; font-size: 11px; width: 20px; flex-shrink: 0; }
+body.light-mode .learn-sidebar { background: #f6f8fa; border-right-color: #e0e0e0; }
+body.light-mode .learn-sidebar h3 { color: #888; }
+body.light-mode .learn-lesson { color: #656d76; }
+body.light-mode .learn-lesson:hover { background: #f0f2f5; color: #1e1e1e; }
+body.light-mode .learn-lesson.active { background: #f0f2f5; border-left-color: #238636; color: #1e1e1e; }
+.learn-content {
+    flex: 1; overflow-y: auto; padding: 32px 40px; background: #161b22;
+}
+.learn-content h2 { color: #e6edf3; font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+.learn-content .meta { color: #8b949e; font-size: 13px; margin-bottom: 24px; }
+.learn-content p { color: #c9d1d9; font-size: 15px; line-height: 1.8; margin-bottom: 16px; }
+.learn-content .code-block {
+    background: #0d1117; border: 1px solid #21262d; border-radius: 12px; padding: 20px;
+    font-family: 'Consolas','Courier New',monospace; font-size: 14px; line-height: 1.6;
+    color: #e6edf3; margin-bottom: 20px; white-space: pre-wrap; overflow-x: auto;
+}
+.learn-content .tip {
+    background: rgba(78,201,176,0.06); border: 1px solid rgba(78,201,176,0.15);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; font-size: 14px; color: #c9d1d9; line-height: 1.6;
+}
+.learn-content .tip strong { color: #4ec9b0; }
+body.light-mode .learn-content { background: #fff; }
+body.light-mode .learn-content h2 { color: #1e1e1e; }
+body.light-mode .learn-content .meta { color: #888; }
+body.light-mode .learn-content p { color: #333; }
+body.light-mode .learn-content .code-block { background: #f6f8fa; border-color: #e0e0e0; color: #1e1e1e; }
+body.light-mode .learn-content .tip { background: rgba(35,134,54,0.04); border-color: rgba(35,134,54,0.12); color: #333; }
+body.light-mode .learn-content .tip strong { color: #238636; }
+body.light-mode .learn-lesson .num { color: #aaa; }
 /* ===== MAIN ===== */
 .main { display: flex; flex: 1; overflow: hidden; }
 /* ===== RESIZE HANDLES ===== */
@@ -910,6 +965,14 @@ body.light-mode .cm-variable { color: #333 !important; }
     .panel-header { font-size: 11px; padding: 6px 12px; }
     .main { flex-direction: column; }
     .editor-panel, .output-panel { flex: 1; }
+    .learn-panel { flex-direction: column; }
+    .learn-sidebar { width: 100%; max-height: 200px; border-right: none; border-bottom: 1px solid #21262d; padding: 12px 0; }
+    .learn-content { padding: 20px; }
+    .learn-content h2 { font-size: 18px; }
+    .learn-content p { font-size: 14px; }
+    .btn-learn { font-size: 11px; padding: 6px 10px; }
+    .btn-learn .learn-icon { display: none; }
+    body.light-mode .learn-sidebar { border-bottom-color: #e0e0e0; }
 }
 body.light-mode #mobileToggle { color: #888; }
 body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
@@ -999,6 +1062,7 @@ body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
     <div class="header-right">
         <button id="mobileToggle" title="Toggle sidebar">&#9776;</button>
         <span id="openFileLabel" style="font-size:11px;color:#8b949e;display:none"></span>
+        <button class="btn btn-learn" id="learnBtn"><span class="learn-icon">&#128218;</span> Learn</button>
         <button class="btn btn-run" id="runBtn">▶ Run</button>
         <button class="btn btn-signin" id="signInBtn" style="display:none">Sign In</button>
         <button class="avatar-btn" id="avatarBtn">?</button>
@@ -1040,6 +1104,11 @@ body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
         <div id="output"><span class="info">// Ready</span></div>
     </div>
 </div>
+</div>
+
+<div class="learn-panel" id="learnPanel">
+    <div class="learn-sidebar" id="learnSidebar"></div>
+    <div class="learn-content" id="learnContent"></div>
 </div>
 
 <div class="settings-overlay" id="settingsOverlay"></div>
@@ -1574,6 +1643,134 @@ if (auth) {
     }
   });
 }
+
+// ===== LEARNING PATH =====
+const LESSONS = [
+  { title: "Hello, World!", meta: "Beginner \u2022 5 min", code: `print("Hello, World!")`, content: `
+    <h2>Hello, World!</h2>
+    <div class="meta">${"Beginner \u2022 5 min"}</div>
+    <p>Welcome to Python! The first thing every programmer writes is a program that prints "Hello, World!". Python makes this incredibly simple.</p>
+    <p>Type the code below and press <strong>Run</strong> to see the output.</p>
+    <div class="tip"><strong>Tip:</strong> Click "Open in Editor" to load this code into the editor and run it.</div>
+  `},
+  { title: "Variables & Data Types", meta: "Beginner \u2022 8 min", code: `name = "Uscrovis"\nage = 2\npi = 3.14\nis_fun = True\nprint(f"Welcome to {name}, age {age}, pi = {pi}, is it fun? {is_fun}")`, content: `
+    <h2>Variables & Data Types</h2>
+    <div class="meta">${"Beginner \u2022 8 min"}</div>
+    <p>Python has several built-in data types. The most common are <strong>strings</strong> (text), <strong>integers</strong> (whole numbers), <strong>floats</strong> (decimals), and <strong>booleans</strong> (True/False).</p>
+    <p>You don't need to declare the type — Python infers it automatically.</p>
+    <div class="tip"><strong>Note:</strong> Use <code>type()</code> to check a variable's type.</div>
+  `},
+  { title: "Strings & Formatting", meta: "Beginner \u2022 7 min", code: `name = "Uscrovis"\nlang = "Python"\n# f-strings (Python 3.6+)\nprint(f"{name} is a free online {lang} IDE")\n# Methods\nprint(lang.upper())\nprint(lang.lower())\nprint(len(lang))`, content: `
+    <h2>Strings & Formatting</h2>
+    <div class="meta">${"Beginner \u2022 7 min"}</div>
+    <p>Strings are sequences of characters. Python offers powerful ways to format and manipulate them.</p>
+    <p><strong>f-strings</strong> (Python 3.6+) let you embed variables directly in strings using <code>{variable}</code>.</p>
+  `},
+  { title: "Lists & Loops", meta: "Beginner \u2022 10 min", code: `fruits = ["apple", "banana", "cherry"]\nfor fruit in fruits:\n    print(fruit)\nprint()\n# Range loop\nfor i in range(5):\n    print(i, end=" ")`, content: `
+    <h2>Lists & Loops</h2>
+    <div class="meta">${"Beginner \u2022 10 min"}</div>
+    <p>Lists store multiple items in one variable. Use a <strong>for loop</strong> to iterate over them.</p>
+    <p><code>range(n)</code> generates numbers from 0 to n-1.</p>
+  `},
+  { title: "Conditions & If/Else", meta: "Beginner \u2022 8 min", code: `age = 18\nif age >= 18:\n    print("You can vote!")\nelif age >= 16:\n    print("Almost there!")\nelse:\n    print("Too young")\n\n# Ternary\nstatus = "Adult" if age >= 18 else "Minor"\nprint(status)`, content: `
+    <h2>Conditions & If/Else</h2>
+    <div class="meta">${"Beginner \u2022 8 min"}</div>
+    <p>Use <strong>if</strong>, <strong>elif</strong>, and <strong>else</strong> to make decisions in your code.</p>
+    <p>Python also supports the <strong>ternary operator</strong>: <code>x if condition else y</code>.</p>
+  `},
+  { title: "Functions", meta: "Beginner \u2022 10 min", code: `def greet(name):\n    return f"Hello, {name}!"\n\ndef add(a, b):\n    return a + b\n\nprint(greet("Uscrovis"))\nprint(add(5, 3))`, content: `
+    <h2>Functions</h2>
+    <div class="meta">${"Beginner \u2022 10 min"}</div>
+    <p>Functions are reusable blocks of code. Define them with <strong>def</strong>.</p>
+    <p>A function can take parameters and <strong>return</strong> a value.</p>
+  `},
+  { title: "Dictionaries", meta: "Intermediate \u2022 8 min", code: `user = {\n    "name": "Uscrovis",\n    "age": 2,\n    "language": "Python"\n}\nprint(user["name"])\nuser["version"] = "1.0"\nfor key, val in user.items():\n    print(f"{key}: {val}")`, content: `
+    <h2>Dictionaries</h2>
+    <div class="meta">${"Intermediate \u2022 8 min"}</div>
+    <p>Dictionaries store key-value pairs. They are fast and flexible.</p>
+    <p>Use <code>.items()</code> to loop through both keys and values.</p>
+  `},
+  { title: "Lists & List Comph.", meta: "Intermediate \u2022 10 min", code: `nums = [1, 2, 3, 4, 5]\nsquares = [n**2 for n in nums]\nevens = [n for n in nums if n % 2 == 0]\nprint("Squares:", squares)\nprint("Evens:", evens)`, content: `
+    <h2>List Comprehension</h2>
+    <div class="meta">${"Intermediate \u2022 10 min"}</div>
+    <p>List comprehension is a concise way to create lists.</p>
+    <p>Syntax: <code>[expression for item in iterable if condition]</code></p>
+  `},
+  { title: "Error Handling", meta: "Intermediate \u2022 7 min", code: `try:\n    n = int(input("Enter a number: "))\n    print(10 / n)\nexcept ValueError:\n    print("That's not a number!")\nexcept ZeroDivisionError:\n    print("Can't divide by zero!")\nelse:\n    print("No errors!")\nfinally:\n    print("Done")`, content: `
+    <h2>Error Handling</h2>
+    <div class="meta">${"Intermediate \u2022 7 min"}</div>
+    <p>Use <strong>try/except</strong> to handle errors gracefully.</p>
+    <p><strong>else</strong> runs if no error, <strong>finally</strong> always runs.</p>
+  `},
+  { title: "File Handling", meta: "Intermediate \u2022 8 min", code: `with open("example.txt", "w") as f:\n    f.write("Hello from Uscrovis!")\nwith open("example.txt", "r") as f:\n    content = f.read()\nprint(content)`, content: `
+    <h2>File Handling</h2>
+    <div class="meta">${"Intermediate \u2022 8 min"}</div>
+    <p>Use <strong>with open()</strong> to read and write files safely. The file automatically closes when done.</p>
+    <p>Modes: <code>"r"</code> (read), <code>"w"</code> (write), <code>"a"</code> (append).</p>
+  `},
+  { title: "Classes & OOP", meta: "Advanced \u2022 12 min", code: `class Dog:\n    def __init__(self, name):\n        self.name = name\n    def bark(self):\n        return f"{self.name} says woof!"\n\nmy_dog = Dog("Rex")\nprint(my_dog.bark())`, content: `
+    <h2>Classes & OOP</h2>
+    <div class="meta">${"Advanced \u2022 12 min"}</div>
+    <p><strong>Object-Oriented Programming</strong> organizes code into classes.</p>
+    <p><code>__init__</code> is the constructor that runs when creating an object.</p>
+  `},
+  { title: "Modules & Imports", meta: "Advanced \u2022 8 min", code: `import math\nfrom random import randint\n\nprint(f"Pi: {math.pi}")\nprint(f"Random 1-10: {randint(1, 10)}")`, content: `
+    <h2>Modules & Imports</h2>
+    <div class="meta">${"Advanced \u2022 8 min"}</div>
+    <p>Python's standard library has thousands of modules. Use <strong>import</strong> to load them.</p>
+    <p><code>from module import function</code> imports only what you need.</p>
+  `}
+];
+
+let currentLesson = 0;
+
+function renderLessons() {
+  const sidebar = document.getElementById('learnSidebar');
+  sidebar.innerHTML = '<h3>Python Course</h3>' + LESSONS.map((l, i) =>
+    '<div class="learn-lesson' + (i === currentLesson ? ' active' : '') + '" data-i="' + i + '">' +
+    '<span class="num">' + (i+1) + '</span>' + l.title +
+    '</div>'
+  ).join('');
+  sidebar.querySelectorAll('.learn-lesson').forEach(el => {
+    el.addEventListener('click', () => {
+      currentLesson = parseInt(el.dataset.i);
+      renderLessons();
+    });
+  });
+  showLesson(currentLesson);
+}
+
+function showLesson(i) {
+  const lesson = LESSONS[i];
+  const content = document.getElementById('learnContent');
+  content.innerHTML = lesson.content +
+    '<div class="code-block">' + lesson.code + '</div>' +
+    '<button class="btn btn-run" onclick="loadLessonCode(' + i + ')" style="margin-top:12px">Open in Editor & Run</button>';
+}
+
+function loadLessonCode(i) {
+  showEditor();
+  cm.setValue(LESSONS[i].code);
+  setTimeout(() => runBtn.click(), 300);
+}
+
+function showLearn() {
+  document.getElementById('learnPanel').classList.add('show');
+  document.querySelector('.app-container').style.display = 'none';
+  document.getElementById('learnBtn').classList.add('active');
+  renderLessons();
+}
+
+function showEditor() {
+  document.getElementById('learnPanel').classList.remove('show');
+  document.querySelector('.app-container').style.display = 'flex';
+  document.getElementById('learnBtn').classList.remove('active');
+}
+
+document.getElementById('learnBtn').addEventListener('click', () => {
+  if (document.getElementById('learnPanel').classList.contains('show')) showEditor();
+  else showLearn();
+});
 
 // ===== INIT =====
 setTimeout(() => { if (cm) cm.refresh(); }, 500);
