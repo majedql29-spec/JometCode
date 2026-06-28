@@ -10,22 +10,22 @@
 <link rel="icon" href="/logo.png" type="image/png" sizes="96x96">
 <link rel="apple-touch-icon" href="/logo.png" sizes="180x180">
 <link rel="shortcut icon" href="/logo.png" type="image/png">
-<meta name="description" content="Learn Python for free with Uscrovis — 21 interactive lessons from beginner to advanced. Variables, functions, OOP, decorators, generators, and more. Write and run Python code in your browser.">
+<meta name="description" content="Learn Python for free with Uscrovis — 28 interactive lessons from beginner to advanced. Variables, functions, OOP, decorators, generators, async, regex, and more. Write and run Python code in your browser.">
 <meta name="keywords" content="learn Python, Python tutorial, Python lessons, free Python course, Uscrovis, Python for beginners, learn Python online, Python programming, Python coding, free Python tutorial, interactive Python course, Python basics, Python from scratch, learn to code Python, Python 3, beginner Python course">
-<meta property="og:title" content="Uscrovis Learn — Free Python Course (21 Lessons)">
-<meta property="og:description" content="Learn Python for free with 21 interactive lessons. From Hello World to OOP, decorators, and generators. Write and run code in your browser — no setup needed.">
+<meta property="og:title" content="Uscrovis Learn — Free Python Course (28 Lessons)">
+<meta property="og:description" content="Learn Python for free with 28 interactive lessons. From Hello World to OOP, decorators, generators, async, and regex. Write and run code in your browser — no setup needed.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Uscrovis">
 <meta property="og:url" content="https://uscrovis.xyz/learn.html">
 <meta property="og:image" content="https://uscrovis.xyz/logo.png">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Uscrovis Learn — Free Python Course (21 Lessons)">
+<meta name="twitter:title" content="Uscrovis Learn — Free Python Course (28 Lessons)">
 <meta name="twitter:description" content="Learn Python for free with 21 interactive lessons. Beginner to advanced. Write and run code in your browser.">
 <meta name="twitter:image" content="https://uscrovis.xyz/logo.png">
 <link rel="canonical" href="https://uscrovis.xyz/learn.html">
 <link rel="sitemap" href="https://uscrovis.xyz/sitemap.xml" type="application/xml">
-<title>Uscrovis Learn — Free Python Course (21 Interactive Lessons) | Learn Python Online</title>
+<title>Uscrovis Learn — Free Python Course (28 Interactive Lessons) | Learn Python Online</title>
 <script type="application/ld+json">
 [
 {
@@ -47,7 +47,7 @@
   "@context": "https://schema.org",
   "@type": "Course",
   "name": "Uscrovis Python Course",
-  "description": "Free interactive Python course with 21 lessons covering beginner, intermediate, and advanced topics. Learn Python by writing and running real code in your browser.",
+  "description": "Free interactive Python course with 28 lessons covering beginner, intermediate, and advanced topics. Learn Python by writing and running real code in your browser.",
   "url": "https://uscrovis.xyz/learn.html",
   "provider": {
     "@type": "Organization",
@@ -56,7 +56,7 @@
     "logo": "https://uscrovis.xyz/logo.png"
   },
   "educationalLevel": "Beginner to Advanced",
-  "numberOfLessons": 21,
+  "numberOfLessons": 28,
   "teaches": [
     "Python syntax and basics",
     "Variables, data types, type conversion",
@@ -71,7 +71,12 @@
     "Object-oriented programming",
     "Modules and imports",
     "Decorators",
-    "Generators and yield"
+    "Generators and yield",
+    "Regular expressions (regex)",
+    "Working with dates and time",
+    "CSV file handling",
+    "Async programming (asyncio)",
+    "Context managers"
   ],
   "audience": {
     "@type": "Audience",
@@ -90,7 +95,7 @@
   "@type": "WebPage",
   "@id": "https://uscrovis.xyz/learn.html",
   "name": "Uscrovis Learn — Free Python Course",
-  "description": "Free interactive Python course with 21 lessons from beginner to advanced. Learn Python online with code examples you can run directly in your browser.",
+  "description": "Free interactive Python course with 28 lessons from beginner to advanced. Learn Python online with code examples you can run directly in your browser.",
   "url": "https://uscrovis.xyz/learn.html",
   "isPartOf": { "@id": "https://uscrovis.xyz" }
 },
@@ -100,7 +105,7 @@
   "name": "Uscrovis Python Course",
   "description": "Interactive Python lessons with runnable code examples",
   "educationalLevel": ["Beginner", "Intermediate", "Advanced"],
-  "timeRequired": "PT4H",
+  "timeRequired": "PT5H",
   "typicalAgeRange": "14-99",
   "inLanguage": "en-US"
 }
@@ -885,6 +890,294 @@ print(list(squares))`,
       <p>This creates a generator that produces squares on demand, using almost no memory — unlike a list comprehension which would create a million-element list.</p>
       <p>Generators are perfect for: reading large files line by line, infinite sequences, data streams, and pipeline processing.</p>
       <div class="tip"><strong>Key insight:</strong> A generator remembers its state between yields. This is different from a regular function which starts fresh on every call.</div>
+    `
+  },
+  {
+    title: "Input & Output", level: "beginner", mins: 6,
+    code: `# Taking user input
+name = input("What is your name? ")
+print("Hello, " + name + "!")
+
+# Input returns a string — convert if needed
+age = int(input("How old are you? "))
+print("Next year you will be", age + 1)
+
+# Formatted output with f-strings
+print(f"Nice to meet you, {name}! You are {age} years old.")
+
+# Multi-line output
+print("""
+  Line 1
+  Line 2
+  Line 3
+""")`,
+    content: `
+      <p>The <code>input()</code> function is Python's built-in way to read user input from the terminal. It pauses execution, displays an optional prompt string, and waits for the user to type something and press Enter. The function always returns a <strong>string</strong> — so if you need a number, you must convert it with <code>int()</code> or <code>float()</code>.</p>
+      <p>The <code>print()</code> function outputs text to the console. You can pass multiple arguments separated by commas; they'll be printed with a space between them. The <code>sep</code> and <code>end</code> parameters let you customize the separator and line ending:</p>
+      <p><code>print(1, 2, 3, sep='-', end='!')  # → 1-2-3!</code></p>
+      <p><strong>f-strings</strong> (formatted string literals) are the modern way to embed expressions inside strings. Prefix the string with <code>f</code> and use curly braces for variables:</p>
+      <p><code>print(f"Hello {name.upper()}")</code></p>
+      <p>F-strings are faster and more readable than concatenation (<code>+</code>) or the older <code>%</code> formatting and <code>.format()</code> methods.</p>
+      <div class="tip"><strong>Security tip:</strong> Always convert and validate user input. Never pass raw input to <code>eval()</code> or <code>exec()</code> — it's a major security risk.</div>
+    `
+  },
+  {
+    title: "Comments & Best Practices", level: "beginner", mins: 5,
+    code: `# This is a single-line comment
+
+"""
+This is a multi-line docstring.
+It describes what the code does.
+"""
+
+def greet(name):
+    """Return a friendly greeting."""
+    return f"Hello, {name}!"
+
+# Use descriptive variable names
+user_age = 25
+total_price = 49.99
+
+# Avoid magic numbers
+TAX_RATE = 0.08
+tax = total_price * TAX_RATE`,
+    content: `
+      <p><strong>Comments</strong> explain code to human readers (including your future self). In Python, use <code>#</code> for single-line comments and triple-quoted strings (<code>\"\"\" \"\"\"</code>) for multi-line docstrings. A comment should explain <em>why</em> something is done, not <em>what</em> the code does — the code itself should be clear enough for that.</p>
+      <p><strong>Best practices to follow:</strong></p>
+      <ul>
+        <li><strong>Use meaningful names</strong> — <code>user_age</code> not <code>ua</code> or <code>x</code></li>
+        <li><strong>Follow PEP 8</strong> — Python's style guide: 4-space indentation, blank lines around functions, lowercase_with_underscores for variables</li>
+        <li><strong>Keep functions small</strong> — each function should do one thing well</li>
+        <li><strong>Avoid magic numbers</strong> — define constants with UPPER_CASE names (<code>TAX_RATE = 0.08</code>)</li>
+        <li><strong>Write docstrings</strong> — document what every function, class, and module does</li>
+        <li><strong>DRY (Don't Repeat Yourself)</strong> — if you copy-paste code, refactor it into a function</li>
+      </ul>
+      <div class="tip"><strong>Remember:</strong> Code is read far more often than it is written. Optimize for readability first.</div>
+    `
+  },
+  {
+    title: "Regular Expressions (Regex)", level: "intermediate", mins: 10,
+    code: `import re
+
+pattern = r"[a-z]+"
+text = "Hello 123 World 456"
+
+# findall — returns all matches
+words = re.findall(pattern, text, re.IGNORECASE)
+print(words)  # ['Hello', 'World']
+
+# search — first match anywhere
+match = re.search(r"\\d+", text)
+print(match.group())  # '123'
+
+# match — only at the start
+if re.match(r"Hello", text):
+    print("Starts with Hello")
+
+# sub — replace matches
+result = re.sub(r"\\d+", "#", text)
+print(result)  # 'Hello # World #'
+
+# split — split on pattern
+parts = re.split(r"\\s+", text)
+print(parts)  # ['Hello', '123', 'World', '456']
+
+# Common patterns
+email_pattern = r"[\\w.-]+@[\\w.-]+\\.\\w+"
+phone_pattern = r"\\d{3}-\\d{3}-\\d{4}"`,
+    content: `
+      <p><strong>Regular expressions (regex)</strong> are powerful patterns for matching, searching, and manipulating text. Python's <code>re</code> module provides full regex support. Raw strings (<code>r"..."</code>) are recommended to avoid escaping backslashes.</p>
+      <p><strong>Common metacharacters:</strong></p>
+      <ul>
+        <li><code>.</code> — any character except newline</li>
+        <li><code>\\d</code> — digit (0–9), <code>\\w</code> — word character (letter/digit/underscore), <code>\\s</code> — whitespace</li>
+        <li><code>*</code> — 0 or more, <code>+</code> — 1 or more, <code>?</code> — 0 or 1, <code>{n,m}</code> — n to m repetitions</li>
+        <li><code>[abc]</code> — character class (a, b, or c), <code>[^abc]</code> — negation</li>
+        <li><code>^</code> — start of string, <code>$</code> — end of string</li>
+        <li><code>()</code> — capture group, <code>(?:)</code> — non-capturing group</li>
+      </ul>
+      <p><strong>Key functions:</strong> <code>findall()</code> returns all matches as a list, <code>search()</code> finds the first match anywhere, <code>match()</code> checks only at the start, <code>sub()</code> replaces matches, <code>split()</code> splits on the pattern.</p>
+      <p><strong>Flags</strong> modify behavior: <code>re.IGNORECASE</code> for case-insensitive, <code>re.MULTILINE</code> for ^/$ to match per line, <code>re.DOTALL</code> for . to match newlines.</p>
+      <div class="tip"><strong>Pro tip:</strong> Test your regex interactively at regex101.com. Use verbose mode <code>re.VERBOSE</code> for complex patterns with inline comments and whitespace.</div>
+    `
+  },
+  {
+    title: "Working with Dates", level: "intermediate", mins: 9,
+    code: `from datetime import datetime, date, timedelta
+
+# Current date and time
+now = datetime.now()
+print(now)                    # 2025-01-15 14:30:00.123456
+
+# Current date only
+today = date.today()
+print(today)                  # 2025-01-15
+
+# Format dates (strftime)
+print(now.strftime("%Y-%m-%d"))       # 2025-01-15
+print(now.strftime("%A, %B %d, %Y"))  # Wednesday, January 15, 2025
+print(now.strftime("%I:%M %p"))       # 02:30 PM
+
+# Parse strings (strptime)
+parsed = datetime.strptime("2025-01-15", "%Y-%m-%d")
+print(parsed)
+
+# Date arithmetic
+yesterday = today - timedelta(days=1)
+next_week = today + timedelta(weeks=1)
+diff = next_week - yesterday
+print(diff.days)  # 8`,
+    content: `
+      <p>Python's <code>datetime</code> module supplies classes for manipulating dates and times. The three main classes are <code>datetime</code> (date + time), <code>date</code> (date only), and <code>timedelta</code> (duration).</p>
+      <p><strong>Formatting with strftime:</strong></p>
+      <ul>
+        <li><code>%Y</code> — 4-digit year, <code>%y</code> — 2-digit year</li>
+        <li><code>%m</code> — month (01–12), <code>%d</code> — day (01–31)</li>
+        <li><code>%H</code> — 24-hour (00–23), <code>%I</code> — 12-hour (01–12)</li>
+        <li><code>%M</code> — minute, <code>%S</code> — second, <code>%p</code> — AM/PM</li>
+        <li><code>%A</code> — full weekday name, <code>%B</code> — full month name</li>
+      </ul>
+      <p><strong>Parsing with strptime:</strong> converts a string to a <code>datetime</code> object. The format string must match the input exactly.</p>
+      <p><strong>Date math:</strong> <code>timedelta</code> represents a duration. You can add/subtract days, seconds, microseconds, milliseconds, minutes, hours, and weeks. Subtracting two dates gives a <code>timedelta</code>.</p>
+      <p>Also useful: <code>date.weekday()</code> returns 0 (Monday) to 6 (Sunday), and <code>date.isoweekday()</code> returns 1 (Monday) to 7 (Sunday).</p>
+      <div class="tip"><strong>Gotcha:</strong> <code>datetime.now()</code> returns local time. For UTC, use <code>datetime.utcnow()</code> and <code>pytz</code> or <code>zoneinfo</code> for timezone-aware operations.</div>
+    `
+  },
+  {
+    title: "CSV File Handling", level: "intermediate", mins: 8,
+    code: `import csv
+
+# Writing a CSV
+with open("data.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Name", "Age", "City"])
+    writer.writerow(["Alice", 30, "New York"])
+    writer.writerow(["Bob", 25, "London"])
+
+# Reading a CSV
+with open("data.csv", "r") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(row)
+
+# Using DictReader/DictWriter (recommended)
+with open("data.csv", "r") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row["Name"], row["Age"])
+
+# Writing with DictWriter
+with open("output.csv", "w", newline="") as f:
+    fieldnames = ["Name", "Age", "City"]
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerow({"Name": "Charlie", "Age": 35, "City": "Paris"})`,
+    content: `
+      <p><strong>CSV (Comma-Separated Values)</strong> is a simple file format for storing tabular data. Python's built-in <code>csv</code> module makes it easy to read and write CSV files.</p>
+      <p><strong>Two approaches:</strong></p>
+      <ul>
+        <li><strong><code>csv.reader</code> / <code>csv.writer</code></strong> — work with lists of rows. Each row is a list of strings.</li>
+        <li><strong><code>csv.DictReader</code> / <code>csv.DictWriter</code></strong> — work with dictionaries. Each row is a dict keyed by the header names. More readable and less error-prone for files with many columns.</li>
+      </ul>
+      <p><strong>Important details:</strong></p>
+      <ul>
+        <li>Always open files with <code>newline=""</code> when writing CSVs to avoid extra blank lines on Windows</li>
+        <li>Specify <code>delimiter</code> for non-comma separators (e.g., <code>csv.reader(f, delimiter=';')</code>)</li>
+        <li>Use <code>quoting=csv.QUOTE_ALL</code> to quote every field, or <code>QUOTE_NONNUMERIC</code> for selective quoting</li>
+        <li>CSV files can contain special characters; use <code>encoding="utf-8"</code> for proper Unicode support</li>
+      </ul>
+      <div class="tip"><strong>Pro tip:</strong> For large CSV files (100k+ rows), consider using <code>pandas.read_csv()</code> which is faster and more memory-efficient than the standard library reader.</div>
+    `
+  },
+  {
+    title: "Async Programming (asyncio)", level: "advanced", mins: 12,
+    code: `import asyncio
+
+async def fetch_data(name, delay):
+    """Simulate fetching data from a URL."""
+    print(f"Fetching {name}...")
+    await asyncio.sleep(delay)
+    print(f"Got {name}!")
+    return f"data from {name}"
+
+async def main():
+    # Run two tasks concurrently
+    task1 = asyncio.create_task(fetch_data("API A", 3))
+    task2 = asyncio.create_task(fetch_data("API B", 2))
+    
+    # Wait for both to complete
+    result1 = await task1
+    result2 = await task2
+    print(result1, result2)
+    
+    # Or gather them together
+    results = await asyncio.gather(
+        fetch_data("API C", 1),
+        fetch_data("API D", 4)
+    )
+    print(results)
+
+# Run the async entry point
+asyncio.run(main())`,
+    content: `
+      <p><strong><code>asyncio</code></strong> is Python's standard library for writing concurrent code using the <code>async</code> / <code>await</code> syntax. It allows you to handle multiple I/O-bound tasks (network requests, file reads, database queries) seemingly in parallel within a single thread.</p>
+      <p><strong>Key concepts:</strong></p>
+      <ul>
+        <li><strong><code>async def</code></strong> — defines a coroutine (an async function)</li>
+        <li><strong><code>await</code></strong> — yields control back to the event loop, allowing other tasks to run while waiting</li>
+        <li><strong><code>asyncio.run(main())</code></strong> — the entry point that creates and runs the event loop</li>
+        <li><strong><code>asyncio.create_task()</code></strong> — schedules a coroutine to run concurrently</li>
+        <li><strong><code>asyncio.gather()</code></strong> — runs multiple coroutines concurrently and returns all results</li>
+      </ul>
+      <p><strong>When to use asyncio:</strong> I/O-bound tasks where you spend most of the time waiting (web scraping, API calls, database queries). It's <em>not</em> suitable for CPU-bound tasks (calculation, data processing) — use <code>multiprocessing</code> for that.</p>
+      <p><strong>Note:</strong> <code>asyncio.sleep()</code> is the async version of <code>time.sleep()</code>. Never use <code>time.sleep()</code> inside an async function — it blocks the entire event loop.</p>
+      <div class="tip"><strong>Key insight:</strong> asyncio is single-threaded. It achieves concurrency by switching between tasks at <code>await</code> points, not by running code in parallel. Think of it as cooperative multitasking.</div>
+    `
+  },
+  {
+    title: "Context Managers", level: "advanced", mins: 8,
+    code: `# Using a context manager
+with open("file.txt", "w") as f:
+    f.write("Hello!")
+
+# Custom context manager (class-based)
+class ManagedFile:
+    def __enter__(self):
+        print("Opening file...")
+        self.file = open("file.txt", "w")
+        return self.file
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print("Closing file...")
+        self.file.close()
+        # Return True to suppress exceptions
+        return False
+
+with ManagedFile() as f:
+    f.write("Custom context!")
+
+# Custom context manager (contextlib)
+from contextlib import contextmanager
+
+@contextmanager
+def managed_file(filename, mode):
+    print("Entering context")
+    f = open(filename, mode)
+    try:
+        yield f
+    finally:
+        print("Exiting context")
+        f.close()`,
+    content: `
+      <p><strong>Context managers</strong> let you allocate and release resources precisely using the <code>with</code> statement. The most common example is file handling — the file is automatically closed when the block exits, even if an error occurs.</p>
+      <p><strong>How they work:</strong></p>
+      <ul>
+        <li><code>__enter__</code> — runs when entering the <code>with</code> block. Returns the resource (e.g., the file object)</li>
+        <li><code>__exit__</code> — runs when leaving the <code>with</code> block (normal exit, exception, or <code>return</code>). Receives the exception type, value, and traceback. Return <code>True</code> to suppress an exception.</li>
+      </ul>
+      <p><strong>Using <code>contextlib</code>:</strong> The <code>@contextmanager</code> decorator lets you write context managers as generator functions. The code before <code>yield</code> is <code>__enter__</code>, the yield value is the resource, and the code after <code>yield</code> is <code>__exit__</code> (wrapped in <code>try/finally</code> for safety).</p>
+      <p>Context managers are useful for: file handles, database connections, locks, network sockets, temporary directories, and changing directories temporarily.</p>
+      <div class="tip"><strong>Best practice:</strong> If you see a pattern like <code>open()</code> + <code>close()</code> always paired together, wrap it in a context manager for safety.</div>
     `
   }
 ];
