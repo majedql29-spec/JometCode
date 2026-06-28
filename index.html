@@ -505,24 +505,6 @@ body.light-mode .btn-learn:hover { border-color: #238636; color: #238636; }
     border-top: 1px solid #21262d;
     padding: 8px 10px;
 }
-.sidebar-footer-inner {
-    display: flex; align-items: center; gap: 6px;
-}
-.sidebar-learn-link {
-    flex: 1; display: flex; align-items: center; gap: 6px;
-    padding: 7px 10px; border-radius: 8px;
-    color: #e6edf3; font-size: 12px; font-weight: 500;
-    text-decoration: none; transition: all 0.2s;
-    background: rgba(255,255,255,0.04);
-}
-.sidebar-learn-link:hover {
-    background: rgba(255,255,255,0.08);
-    color: #fff;
-}
-.sidebar-footer-divider {
-    width: 1px; height: 24px;
-    background: #21262d; flex-shrink: 0;
-}
 .sidebar-donate-btn {
     display: flex; align-items: center; gap: 5px;
     padding: 7px 12px; border-radius: 8px;
@@ -696,9 +678,6 @@ body.light-mode .btn-learn:hover { border-color: #238636; color: #238636; }
     line-height: 1.5;
 }
 body.light-mode .sidebar-footer { background: #fff; border-top-color: #e0e0e0; }
-body.light-mode .sidebar-learn-link { background: #f5f5f5; color: #1e1e1e; }
-body.light-mode .sidebar-learn-link:hover { background: #eee; color: #000; }
-body.light-mode .sidebar-footer-divider { background: #e0e0e0; }
 body.light-mode .sidebar-donate-btn { background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(217,119,6,0.04)); border-color: rgba(245,158,11,0.2); color: #b45309; }
 body.light-mode .sidebar-donate-btn:hover { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.08)); border-color: rgba(245,158,11,0.4); color: #92400e; }
 body.light-mode #donateOverlay { background: rgba(0,0,0,0.3); }
@@ -1332,11 +1311,7 @@ body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
         </div>
         <div class="sidebar-content" id="fileTree"></div>
         <div class="sidebar-footer" id="sidebarFooter">
-            <div class="sidebar-footer-inner">
-                <a href="/learn.html" class="sidebar-learn-link">&#128218; Learn Python</a>
-                <div class="sidebar-footer-divider"></div>
-                <button class="sidebar-donate-btn" id="donateBtn">&#10084;&#65039; Donate</button>
-            </div>
+            <button class="sidebar-donate-btn" id="donateBtn" style="width:100%">&#10084;&#65039; Support Uscrovis</button>
         </div>
     </div>
     <div class="resize-handle" id="resizeSidebar"></div>
