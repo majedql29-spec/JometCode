@@ -16,8 +16,8 @@
 <link rel="icon" href="/logo.png" type="image/png" sizes="96x96">
 <link rel="apple-touch-icon" href="/logo.png" sizes="180x180">
 <link rel="shortcut icon" href="/logo.png" type="image/png">
-<meta name="description" content="Uscrovis is a free online Python IDE. Write, run, and save Python code in your browser with syntax highlighting, autocomplete, and zero setup. Fast, secure, and no download required.">
-<meta name="keywords" content="Uscrovis, Python IDE, online Python IDE, free Python IDE, Python code editor, online Python editor, Python in browser, write Python online, run Python online, Python compiler, learn Python, Python coding, Python programming, web Python editor, browser Python IDE, Python sandbox, Python REPL online, browser IDE, free coding tool, cloud Python IDE">
+<meta name="description" content="Uscrovis is a free online Python IDE. Write, run, and save Python code in your browser with syntax highlighting, autocomplete, and zero setup. Includes a free Python course with interactive lessons from beginner to advanced.">
+<meta name="keywords" content="Uscrovis, Python IDE, online Python IDE, free Python IDE, Python code editor, online Python editor, Python in browser, write Python online, run Python online, Python compiler, learn Python, Python coding, Python programming, web Python editor, browser Python IDE, Python sandbox, Python REPL online, browser IDE, free coding tool, cloud Python IDE, Python course, learn Python online, free Python course, Python tutorial, Python lessons, interactive Python course, beginner Python, Python programming course">
 <meta name="author" content="Uscrovis">
 <meta property="og:title" content="Uscrovis — Free Online Python IDE">
 <meta property="og:description" content="Free online Python IDE. Write, run, and save Python code in your browser with syntax highlighting, autocomplete, and zero setup.">
@@ -34,6 +34,7 @@
 <meta name="twitter:description" content="Free online Python IDE. Write, run, and save Python code in your browser.">
 <meta name="twitter:image" content="https://uscrovis.xyz/logo.png">
 <link rel="canonical" href="https://uscrovis.xyz">
+<link rel="sitemap" href="https://uscrovis.xyz/sitemap.xml" type="application/xml">
 <title>Uscrovis — Free Online Python IDE | Write, Run &amp; Learn Python in Browser</title>
 <script type="application/ld+json">
 [
@@ -45,6 +46,11 @@
     "position": 1,
     "name": "Home",
     "item": "https://uscrovis.xyz"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Learn Python",
+    "item": "https://uscrovis.xyz/learn.html"
   }]
 },
 {
@@ -55,6 +61,8 @@
   "name": "Uscrovis",
   "alternateName": "Uscrovis",
   "description": "Free online Python IDE — write, run, and save Python code in your browser",
+  "about": "Python programming",
+  "educationalUse": "learning resource",
   "publisher": {
     "@type": "Organization",
     "@id": "https://uscrovis.xyz",
@@ -189,6 +197,14 @@
     },
     {
       "@type": "Question",
+      "name": "Can I learn Python with Uscrovis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Uscrovis offers a free interactive Python course with 21 lessons ranging from beginner to advanced. Topics include variables, strings, functions, lists, dictionaries, OOP, decorators, generators, and more. Each lesson includes explanations, code examples, and the ability to run code directly in the editor."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "How does Uscrovis handle code security?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -207,7 +223,8 @@
     { "@type": "HowToStep", "position": 2, "name": "Write Python code", "text": "Type or paste your Python code into the editor with syntax highlighting." },
     { "@type": "HowToStep", "position": 3, "name": "Run your code", "text": "Click the Run button or press Ctrl+Enter to execute the code." },
     { "@type": "HowToStep", "position": 4, "name": "View output", "text": "See the execution results instantly in the output panel." },
-    { "@type": "HowToStep", "position": 5, "name": "Save your project", "text": "Sign in with Google or GitHub to save files and organize them in folders." }
+    { "@type": "HowToStep", "position": 5, "name": "Learn Python", "text": "Take the free interactive Python course with 21 lessons covering beginner to advanced topics." },
+    { "@type": "HowToStep", "position": 6, "name": "Save your project", "text": "Sign in with Google or GitHub to save files and organize them in folders." }
   ]
 }
 ]
@@ -1056,6 +1073,7 @@ body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
         </div>
         <div class="sidebar-content" id="fileTree"></div>
         <div class="sidebar-footer" id="sidebarFooter">
+            <a href="/learn.html" class="sidebar-learn-link">&#128218; Learn Python</a>
         </div>
     </div>
     <div class="resize-handle" id="resizeSidebar"></div>

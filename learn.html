@@ -10,28 +10,101 @@
 <link rel="icon" href="/logo.png" type="image/png" sizes="96x96">
 <link rel="apple-touch-icon" href="/logo.png" sizes="180x180">
 <link rel="shortcut icon" href="/logo.png" type="image/png">
-<meta name="description" content="Learn Python for free with Uscrovis interactive lessons. Beginner to advanced: variables, loops, functions, OOP, and more.">
-<meta name="keywords" content="learn Python, Python tutorial, Python lessons, free Python course, Uscrovis, Python for beginners">
-<meta property="og:title" content="Uscrovis Learn — Free Python Course">
-<meta property="og:description" content="Learn Python for free with interactive lessons. From Hello World to OOP and modules, start coding today.">
+<meta name="description" content="Learn Python for free with Uscrovis — 21 interactive lessons from beginner to advanced. Variables, functions, OOP, decorators, generators, and more. Write and run Python code in your browser.">
+<meta name="keywords" content="learn Python, Python tutorial, Python lessons, free Python course, Uscrovis, Python for beginners, learn Python online, Python programming, Python coding, free Python tutorial, interactive Python course, Python basics, Python from scratch, learn to code Python, Python 3, beginner Python course">
+<meta property="og:title" content="Uscrovis Learn — Free Python Course (21 Lessons)">
+<meta property="og:description" content="Learn Python for free with 21 interactive lessons. From Hello World to OOP, decorators, and generators. Write and run code in your browser — no setup needed.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Uscrovis">
 <meta property="og:url" content="https://uscrovis.xyz/learn.html">
 <meta property="og:image" content="https://uscrovis.xyz/logo.png">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Uscrovis Learn — Free Python Course">
-<meta name="twitter:description" content="Learn Python for free with interactive lessons.">
+<meta name="twitter:title" content="Uscrovis Learn — Free Python Course (21 Lessons)">
+<meta name="twitter:description" content="Learn Python for free with 21 interactive lessons. Beginner to advanced. Write and run code in your browser.">
+<meta name="twitter:image" content="https://uscrovis.xyz/logo.png">
 <link rel="canonical" href="https://uscrovis.xyz/learn.html">
-<title>Uscrovis Learn — Free Python Course | Interactive Lessons</title>
+<link rel="sitemap" href="https://uscrovis.xyz/sitemap.xml" type="application/xml">
+<title>Uscrovis Learn — Free Python Course (21 Interactive Lessons) | Learn Python Online</title>
 <script type="application/ld+json">
+[
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "https://uscrovis.xyz"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Learn Python",
+    "item": "https://uscrovis.xyz/learn.html"
+  }]
+},
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Uscrovis Python Course",
+  "description": "Free interactive Python course with 21 lessons covering beginner, intermediate, and advanced topics. Learn Python by writing and running real code in your browser.",
+  "url": "https://uscrovis.xyz/learn.html",
+  "provider": {
+    "@type": "Organization",
+    "name": "Uscrovis",
+    "url": "https://uscrovis.xyz",
+    "logo": "https://uscrovis.xyz/logo.png"
+  },
+  "educationalLevel": "Beginner to Advanced",
+  "numberOfLessons": 21,
+  "teaches": [
+    "Python syntax and basics",
+    "Variables, data types, type conversion",
+    "Strings, string methods, formatting",
+    "Lists, tuples, sets, dictionaries",
+    "Control flow, conditionals, loops",
+    "Functions, lambda, map, filter",
+    "List comprehensions",
+    "Error handling with try/except",
+    "File handling",
+    "Working with JSON",
+    "Object-oriented programming",
+    "Modules and imports",
+    "Decorators",
+    "Generators and yield"
+  ],
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Python beginners and intermediate programmers"
+  },
+  "learningResourceType": "Interactive lesson",
+  "isPartOf": {
+    "@id": "https://uscrovis.xyz",
+    "@type": "WebSite",
+    "name": "Uscrovis",
+    "url": "https://uscrovis.xyz"
+  }
+},
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "Uscrovis Learn",
-  "description": "Free Python course with interactive lessons from beginner to advanced.",
+  "@id": "https://uscrovis.xyz/learn.html",
+  "name": "Uscrovis Learn — Free Python Course",
+  "description": "Free interactive Python course with 21 lessons from beginner to advanced. Learn Python online with code examples you can run directly in your browser.",
   "url": "https://uscrovis.xyz/learn.html",
   "isPartOf": { "@id": "https://uscrovis.xyz" }
+},
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Uscrovis Python Course",
+  "description": "Interactive Python lessons with runnable code examples",
+  "educationalLevel": ["Beginner", "Intermediate", "Advanced"],
+  "timeRequired": "PT4H",
+  "typicalAgeRange": "14-99",
+  "inLanguage": "en-US"
 }
+]
 </script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -86,7 +159,7 @@ body.light-mode .learn-sidebar { background: #f6f8fa; border-right-color: #e0e0e
 
 .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid #21262d; margin-bottom: 8px; }
 body.light-mode .sidebar-header { border-bottom-color: #e0e0e0; }
-.sidebar-header h3 { font-size: 13px; color: #e6edf3; font-weight: 600; margin-bottom: 10px; }
+.sidebar-header h1 { font-size: 13px; color: #e6edf3; font-weight: 600; margin-bottom: 10px; }
 body.light-mode .sidebar-header h3 { color: #1e1e1e; }
 
 .progress-bar-wrap { height: 4px; background: #21262d; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
@@ -853,7 +926,7 @@ function renderSidebar() {
 
   sidebar.innerHTML =
     '<div class="sidebar-header">' +
-      '<h3>Python Course</h3>' +
+      '<h1 style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px;letter-spacing:0">Python Course</h1>' +
       '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:' + pct + '%"></div></div>' +
       '<div class="progress-text"><span>' + completed + ' of ' + total + ' completed</span><span>' + pct + '%</span></div>' +
     '</div>' +
@@ -915,7 +988,7 @@ function showLesson(i) {
       '<span class="nav-center">' + (i + 1) + ' / ' + LESSONS.length + '</span>' +
       '<button class="nav-btn" onclick="goLesson(' + (i + 1) + ')"' + (nextDisabled ? ' disabled' : '') + '>Next &rarr;</button>' +
     '</div>' +
-    '<div class="ad-section"><div class="ad-label">\u2014 Ad \u2014</div><div class="ad-inner"><iframe data-aa="2445996" src="//ad.a-ads.com/2445996/?size=120x600" style="border:0;padding:0;width:120px;height:600px;overflow:hidden;display:block;margin:auto"></iframe></div></div>';
+    '<div class="ad-section"><div class="ad-label">\u2014 Ad \u2014</div><div class="ad-inner"><iframe data-aa="2445996" src="//ad.a-ads.com/2445996/?size=320x100" style="border:0;padding:0;width:320px;height:100px;overflow:hidden;display:block;margin:auto"></iframe></div></div>';
 
   // Reset reading progress
   document.getElementById('readingProgress').style.width = '0%';
