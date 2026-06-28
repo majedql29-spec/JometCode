@@ -231,6 +231,18 @@ body.light-mode .code-block { color: #1e1e1e; }
 .btn-run:active { transform: translateY(0); }
 .btn-run:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #484f58; }
+body.light-mode ::-webkit-scrollbar-thumb { background: #d0d7de; }
+body.light-mode ::-webkit-scrollbar-thumb:hover { background: #bbb; }
+.learn-sidebar { scrollbar-width: thin; scrollbar-color: #30363d transparent; }
+body.light-mode .learn-sidebar { scrollbar-color: #d0d7de transparent; }
+.learn-content { scrollbar-width: thin; scrollbar-color: #30363d transparent; }
+body.light-mode .learn-content { scrollbar-color: #d0d7de transparent; }
+
 /* ===== NAVIGATION ===== */
 .lesson-nav {
   display: flex; justify-content: space-between; align-items: center;
@@ -414,6 +426,87 @@ print(add(5, 3))`,
     `
   },
   {
+    title: "Basic Operators", level: "beginner", mins: 7,
+    code: `a = 10
+b = 3
+print("Addition:", a + b)
+print("Subtraction:", a - b)
+print("Multiplication:", a * b)
+print("Division:", a / b)
+print("Floor Div:", a // b)
+print("Modulus:", a % b)
+print("Power:", a ** b)
+print("Is a > b?", a > b)
+print("Is a == b?", a == b)`,
+    content: `
+      <p>Python supports all standard mathematical operators.</p>
+      <p><strong>Arithmetic:</strong> <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>//</code> (floor), <code>%</code> (modulus), <code>**</code> (power).</p>
+      <p><strong>Comparison:</strong> <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> return <code>True</code> or <code>False</code>.</p>
+      <div class="tip"><strong>Note:</strong> <code>//</code> divides and rounds down to the nearest integer.</div>
+    `
+  },
+  {
+    title: "String Methods", level: "beginner", mins: 8,
+    code: `text = "  hello, PYTHON world!  "
+print("strip:", text.strip())
+print("lower:", text.lower())
+print("upper:", text.upper())
+print("title:", text.title())
+print("replace:", text.replace("world", "Uscrovis"))
+words = text.strip().split(" ")
+print("words:", words)
+print("joined:", "-".join(words))`,
+    content: `
+      <p>Python strings have many built-in methods for manipulation.</p>
+      <p><code>strip()</code> removes whitespace, <code>lower()</code>/<code>upper()</code> change case, <code>split()</code> breaks into a list, <code>join()</code> combines a list into a string.</p>
+      <div class="tip"><strong>Tip:</strong> Methods can be chained: <code>"  Hi  ".strip().lower()</code></div>
+    `
+  },
+  {
+    title: "Type Conversion", level: "beginner", mins: 6,
+    code: `# Implicit conversion
+x = 5
+y = 2.5
+print(x + y)
+
+# Explicit conversion
+num_str = "42"
+num_int = int(num_str)
+num_float = float(num_str)
+print(num_int + 8)
+print(num_float + 0.5)
+
+# To string
+age = 25
+print("I am " + str(age) + " years old")`,
+    content: `
+      <p>Python can convert between data types, both <strong>implicitly</strong> (automatically) and <strong>explicitly</strong> using <code>int()</code>, <code>float()</code>, <code>str()</code>.</p>
+      <div class="tip"><strong>Warning:</strong> Converting <code>"abc"</code> to int raises a <code>ValueError</code>.</div>
+    `
+  },
+  {
+    title: "Sets & Tuples", level: "beginner", mins: 9,
+    code: `# Tuple (immutable)
+point = (3, 4)
+print("x:", point[0], "y:", point[1])
+
+# Set (unique, unordered)
+fruits = {"apple", "banana", "cherry", "apple"}
+print("Set:", fruits)
+
+# Set operations
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+print("Union:", a | b)
+print("Intersection:", a & b)
+print("Difference:", a - b)`,
+    content: `
+      <p>Beyond lists, Python has <strong>tuples</strong> (immutable ordered sequences) and <strong>sets</strong> (unordered collections of unique elements).</p>
+      <p>Sets support <strong>union</strong> (<code>|</code>), <strong>intersection</strong> (<code>&amp;</code>), and <strong>difference</strong> (<code>-</code>).</p>
+      <div class="tip"><strong>Note:</strong> Tuples are like lists but cannot be changed after creation.</div>
+    `
+  },
+  {
     title: "Dictionaries", level: "intermediate", mins: 8,
     code: `user = {
     "name": "Uscrovis",
@@ -472,6 +565,63 @@ print(content)`,
     `
   },
   {
+    title: "Lambda Functions", level: "intermediate", mins: 7,
+    code: `# Lambda = anonymous function
+square = lambda x: x ** 2
+print(square(5))
+
+add = lambda a, b: a + b
+print(add(3, 7))
+
+# Use with sorted
+points = [(1, 5), (3, 2), (2, 8)]
+points.sort(key=lambda p: p[1])
+print("Sorted by y:", points)`,
+    content: `
+      <p>A <strong>lambda</strong> is a small anonymous function defined with the <code>lambda</code> keyword.</p>
+      <p>Syntax: <code>lambda arguments: expression</code></p>
+      <p>Lambdas are often passed to <code>sorted()</code>, <code>map()</code>, and <code>filter()</code>.</p>
+    `
+  },
+  {
+    title: "Working with JSON", level: "intermediate", mins: 8,
+    code: `import json
+
+person = {
+    "name": "Alice",
+    "age": 30,
+    "skills": ["Python", "Data Analysis"]
+}
+
+json_str = json.dumps(person, indent=2)
+print(json_str)
+
+parsed = json.loads(json_str)
+print("Name:", parsed["name"])`,
+    content: `
+      <p>The <code>json</code> module lets you encode Python objects as JSON strings and decode them back.</p>
+      <p><code>json.dumps()</code> serializes, <code>json.loads()</code> parses JSON back to Python objects.</p>
+    `
+  },
+  {
+    title: "Map & Filter", level: "intermediate", mins: 7,
+    code: `nums = [1, 2, 3, 4, 5, 6]
+
+squares = list(map(lambda x: x**2, nums))
+print("Squares:", squares)
+
+evens = list(filter(lambda x: x % 2 == 0, nums))
+print("Evens:", evens)
+
+# Same with list comprehensions
+print("Squares LC:", [x**2 for x in nums])
+print("Evens LC:", [x for x in nums if x % 2 == 0])`,
+    content: `
+      <p><code>map()</code> applies a function to every item in an iterable. <code>filter()</code> keeps items where the condition is <code>True</code>.</p>
+      <p>Often list comprehensions provide a cleaner alternative.</p>
+    `
+  },
+  {
     title: "Classes & OOP", level: "advanced", mins: 12,
     code: `class Dog:
     def __init__(self, name):
@@ -496,6 +646,45 @@ print(f"Random 1-10: {randint(1, 10)}")`,
     content: `
       <p>Python's standard library has thousands of modules. Use <strong>import</strong> to load them.</p>
       <p><code>from module import function</code> imports only what you need.</p>
+    `
+  },
+  {
+    title: "Decorators", level: "advanced", mins: 10,
+    code: `def timer(func):
+    def wrapper():
+        print("Starting...")
+        result = func()
+        print("Done!")
+        return result
+    return wrapper
+
+@timer
+def say_hello():
+    print("Hello, Uscrovis!")
+
+say_hello()`,
+    content: `
+      <p><strong>Decorators</strong> modify the behavior of functions using the <code>@decorator</code> syntax.</p>
+      <p>A decorator is a function that takes another function and extends its behavior without modifying it directly.</p>
+    `
+  },
+  {
+    title: "Generators & Yield", level: "advanced", mins: 9,
+    code: `def count_up_to(n):
+    i = 1
+    while i <= n:
+        yield i
+        i += 1
+
+for num in count_up_to(5):
+    print(num)
+
+# Generator expression
+squares = (x**2 for x in range(5))
+print(list(squares))`,
+    content: `
+      <p><strong>Generators</strong> produce values on demand using <code>yield</code> instead of <code>return</code>. They are memory-efficient for large sequences.</p>
+      <p>Generator expressions use <code>()</code> instead of <code>[]</code>.</p>
     `
   }
 ];
