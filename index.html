@@ -511,24 +511,8 @@ body.light-mode .btn-donate { background: linear-gradient(135deg, #f59e0b, #d977
 .sidebar-footer {
     background: #0d1117;
     border-top: 1px solid #21262d;
-    padding: 8px 10px;
 }
-.sidebar-donate-btn {
-    display: flex; align-items: center; gap: 5px;
-    padding: 7px 12px; border-radius: 8px;
-    border: 1px solid rgba(245,158,11,0.25);
-    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(217,119,6,0.06));
-    color: #f0c75e; font-size: 12px; font-weight: 600;
-    cursor: pointer; transition: all 0.3s; white-space: nowrap;
-    font-family: inherit;
-}
-.sidebar-donate-btn:hover {
-    background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.12));
-    border-color: rgba(245,158,11,0.5);
-    box-shadow: 0 4px 16px rgba(245,158,11,0.12);
-    color: #fbbf24; transform: translateY(-1px);
-}
-.sidebar-donate-btn:active { transform: translateY(0); }
+
 /* Donate Modal */
 #donateOverlay {
     position: fixed; inset: 0; z-index: 999999;
@@ -686,8 +670,6 @@ body.light-mode .btn-donate { background: linear-gradient(135deg, #f59e0b, #d977
     line-height: 1.5;
 }
 body.light-mode .sidebar-footer { background: #fff; border-top-color: #e0e0e0; }
-body.light-mode .sidebar-donate-btn { background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(217,119,6,0.04)); border-color: rgba(245,158,11,0.2); color: #b45309; }
-body.light-mode .sidebar-donate-btn:hover { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.08)); border-color: rgba(245,158,11,0.4); color: #92400e; }
 body.light-mode #donateOverlay { background: rgba(0,0,0,0.3); }
 body.light-mode .donate-modal { background: #fff; border-color: #d0d7de; box-shadow: 0 32px 80px rgba(0,0,0,0.1); }
 body.light-mode .donate-modal-header { background: linear-gradient(135deg, #fafafa 0%, #f5f0f8 50%, #fafafa 100%); border-bottom-color: #e0e0e0; }
@@ -1319,9 +1301,7 @@ body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
             </span>
         </div>
         <div class="sidebar-content" id="fileTree"></div>
-        <div class="sidebar-footer" id="sidebarFooter">
-            <button class="sidebar-donate-btn" id="donateBtn" style="width:100%">&#10084;&#65039; Support Uscrovis</button>
-        </div>
+        <div class="sidebar-footer" id="sidebarFooter"></div>
     </div>
     <div class="resize-handle" id="resizeSidebar"></div>
     <div class="editor-panel" id="editorPanel">
@@ -2274,14 +2254,12 @@ runBtn.addEventListener('click', async () => {
 clearBtn.addEventListener('click', () => { output.innerHTML = ''; });
 
 // ===== DONATE MODAL =====
-const donateBtn = document.getElementById('donateBtn');
 const donateHeaderBtn = document.getElementById('donateHeaderBtn');
 const donateOverlay = document.getElementById('donateOverlay');
 const donateClose = document.getElementById('donateClose');
 if (donateOverlay) {
     function openDonate() { donateOverlay.classList.add('open'); }
     function closeDonate() { donateOverlay.classList.remove('open'); }
-    if (donateBtn) donateBtn.addEventListener('click', openDonate);
     if (donateHeaderBtn) donateHeaderBtn.addEventListener('click', openDonate);
     donateClose.addEventListener('click', closeDonate);
     donateOverlay.addEventListener('click', e => { if (e.target === donateOverlay) closeDonate(); });
