@@ -508,17 +508,17 @@ body.light-mode .btn-signin:hover { background: rgba(217,119,6,0.08); }
 /* ===== DROPDOWN LEARN ===== */
 .drop-wrap { position: relative; display: inline-flex; }
 .drop-trigger {
-    background: transparent; color: #e6edf3; border: 1px solid #30363d;
-    font-weight: 500; padding: 8px 14px; border-radius: 20px; font-size: 13px;
+    background: none; border: none; color: #8b949e; font-size: 13px; font-weight: 500;
     cursor: pointer; transition: all 0.2s; font-family: inherit;
-    display: inline-flex; align-items: center; gap: 5px;
-    white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 3px; padding: 4px 8px;
+    border-radius: 6px; letter-spacing: 0.2px;
 }
-.drop-trigger:hover { border-color: #f97316; color: #f97316; background: rgba(249,115,22,0.05); }
-.drop-trigger .drop-arrow { font-size: 8px; transition: transform 0.2s; margin-left: 2px; }
+.drop-trigger:hover { color: #e6edf3; background: rgba(255,255,255,0.04); }
+.drop-trigger .drop-arrow { font-size: 7px; transition: transform 0.2s; color: #8b949e; }
+.drop-trigger:hover .drop-arrow { color: #e6edf3; }
 .drop-trigger.open .drop-arrow { transform: rotate(180deg); }
-body.light-mode .drop-trigger { color: #1e1e1e; border-color: #d0d7de; }
-body.light-mode .drop-trigger:hover { border-color: #d97706; color: #d97706; }
+body.light-mode .drop-trigger { color: #888; }
+body.light-mode .drop-trigger:hover { color: #1e1e1e; background: rgba(0,0,0,0.04); }
 .drop-menu {
     position: absolute; top: calc(100% + 6px); left: 0; min-width: 180px;
     background: #161b22; border: 1px solid #30363d; border-radius: 12px;
@@ -1276,7 +1276,7 @@ body.light-mode .cm-variable { color: #333 !important; }
     .panel-header { font-size: 11px; padding: 6px 12px; }
     .main { flex-direction: column; }
     .editor-panel, .output-panel { flex: 1; }
-    .drop-trigger { font-size: 11px; padding: 6px 10px; }
+    .drop-trigger { font-size: 12px; padding: 2px 6px; }
     .drop-menu { min-width: 150px; right: 0; left: auto; }
     .drop-item { font-size: 12px; padding: 8px 10px; }
 }
@@ -1409,7 +1409,7 @@ body.light-mode #mobileToggle:hover { background: #f0f0f0; color: #333; }
         <button id="mobileToggle" title="Toggle sidebar">&#9776;</button>
         <span id="openFileLabel" style="font-size:11px;color:#8b949e;display:none"></span>
         <div class="drop-wrap" id="learnDropdown">
-            <button class="drop-trigger" id="learnTrigger">&#128218; Learn <span class="drop-arrow">&#9660;</span></button>
+            <button class="drop-trigger" id="learnTrigger">Learn <span class="drop-arrow">&#9660;</span></button>
             <div class="drop-menu">
                 <a href="learn.html" class="drop-item active">
                     <span class="di-icon">&#128008;</span>
