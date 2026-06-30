@@ -2286,13 +2286,18 @@ function deleteItem(path) {
 }
 
 // ===== RUN =====
+function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+}
 function addOutputLine(content, type) {
     const markers = { stdout: '▸', stderr: '✖', success: '✔', 'info-text': 'ⓘ', warn: '⚠', 'error-text': '✖' };
     const marker = markers[type] || '▸';
     const mClass = type === 'stdout' ? 'm-arrow' : type === 'stderr' ? 'm-cross' : type === 'success' ? 'm-check' : 'm-info';
     const line = document.createElement('div');
     line.className = 'output-line';
-    line.innerHTML = '<span class="ol-marker ' + mClass + '">' + marker + '</span><span class="ol-content ' + type + '">' + content + '</span>';
+    line.innerHTML = '<span class="ol-marker ' + mClass + '">' + marker + '</span><span class="ol-content ' + type + '">' + escapeHtml(content) + '</span>';
     output.appendChild(line);
     line.scrollIntoView({ block: 'end' });
 }

@@ -6,17 +6,24 @@ import os
 import tempfile
 import socketserver
 import time
+import re
 from collections import defaultdict
 
-BLOCKED_PATTERNS = [
-    'import os', 'from os', 'import subprocess', 'from subprocess',
-    'import shutil', 'from shutil', 'import ctypes', 'from ctypes',
-    'import sys', 'from sys', 'import socket', 'from socket',
-    'import threading', 'from threading', 'import multiprocessing', 'from multiprocessing',
-    '__import__', 'compile(', 'exec(', 'eval(',
-    'open("/', "open('/", 'open("c:', "open('c:",
-    '__builtins__', '__builtins__.',
+MAX_CODE_SIZE = 100_000
+
+BLOCKED_MODULES = [
+    'os', 'subprocess', 'shutil', 'ctypes', 'sys', 'socket',
+    'threading', 'multiprocessing', 'urllib', 'http.client',
+    'smtplib', 'ftplib', 'telnetlib', 'pathlib', 'glob',
+    'io', 'sqlite3', 'pickle', 'signal', 'asyncio',
 ]
+
+BLOCKED_PATTERNS = [
+    '__import__', '__builtins__',
+    'exec(', 'eval(', 'compile(',
+    'open("/', "open('/", 'open("c:', "open('c:",
+] + [f'import {m}' for m in BLOCKED_MODULES] \
+  + [f'from {m}' for m in BLOCKED_MODULES]
 
 RATE_LIMIT = 10
 RATE_WINDOW = 60
@@ -31,8 +38,11 @@ def is_rate_limited(ip):
     return False
 
 def is_code_safe(code):
+    if len(code) > MAX_CODE_SIZE:
+        return False, f'Code exceeds maximum size of {MAX_CODE_SIZE} bytes'
+    lowered = code.lower()
     for pat in BLOCKED_PATTERNS:
-        if pat in code:
+        if pat in code or pat in lowered:
             return False, f'Code contains blocked pattern: {pat}'
     return True, ''
 
@@ -49,6 +59,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def read_body(self):
         length = int(self.headers.get('Content-Length', 0))
+        if length > MAX_CODE_SIZE + 1000:
+            raise ValueError('Request body too large')
         return json.loads(self.rfile.read(length))
 
     def do_OPTIONS(self):
@@ -63,11 +75,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             ip = self.client_address[0]
             if is_rate_limited(ip):
                 return self.send_json({'output': '', 'error': 'Rate limit exceeded (10 runs per minute)'})
-            data = self.read_body()
+            try:
+                data = self.read_body()
+            except Exception:
+                return self.send_json({'output': '', 'error': 'Invalid request'})
             code = data.get('code', '')
             safe, reason = is_code_safe(code)
             if not safe:
                 return self.send_json({'output': '', 'error': f'Security error: {reason}'})
+            fname = None
             try:
                 with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
                     f.write(code); fname = f.name
@@ -75,13 +91,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     [sys.executable, '-I', fname],
                     capture_output=True, text=True, timeout=10
                 )
-                os.unlink(fname)
                 self.send_json({'output': res.stdout, 'error': res.stderr})
             except subprocess.TimeoutExpired:
-                os.unlink(fname)
                 self.send_json({'output': '', 'error': 'Timeout (10 seconds)'})
-            except Exception as e:
-                self.send_json({'output': '', 'error': str(e)})
+            except Exception:
+                self.send_json({'output': '', 'error': 'Execution error'})
+            finally:
+                if fname and os.path.exists(fname):
+                    try: os.unlink(fname)
+                    except: pass
         else:
             self.send_error_json('Not found')
 
